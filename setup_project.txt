@@ -1,0 +1,3368 @@
+ΔΗΜΙΟΥΡΓΙΑ ANGULAR app
+1)ng new clips
+2)Δημιουργούμε ένα φάκελο 'template' και κάνουμε drag and drop τα αρχεία απο το 'section 6 / 64.'
+3)Κάνουμε copy όλα τα templates από το "index.html" και τα κάνουμε  past στο app.component.html
+STATIC PAGE SETUP
+4)Εγκατάσταση Tailwindcss (https://tailwindcss.com/) : npm install -D tailwindcss@latest
+παράλληλα θα χρησιμοποιήσουμε το Purge CSS που είναι ένα Library που ταιριάζει καλά με το Tailwindcss (https://purgecss.com/)
+α)Στο φάκελο "node_modules/bin" υπάρχουν κάποια αρχεία που μπορούμε να εκτελέσουμε. Για να τα εκτελλέσουμε όσα αρχεία είανι προς εκτέλλεση θα τρέξουμε
+την εντολή: npx tailwind init.
+Έτσι θα δημιουργήσουμε ένα καινούριο αρχείο στο root directory, το "tailwind.config.js"
+β)Πρέπει να ενημερώσουμε το Purge CSS που θα βρει τα tailwind files  σε διάφορες τοποθεσίες.
+  β1)"tailwind.config.js" στο πεδίο "content: ['./src/**/*.{html,ts}']," όπου λέει στο Purge να ψάξει στον src folder για html,ts files
+  β2)Πρέπει να κάνουμε load το tailwind στο "styles.css": @tailwind base; @tailwind components; @tailwind utilities;
+  β3)Παίρνουμε όλα τα αρχεία το "template/custom.css" και τα βάζουμε στο "styles.css" file
+γ)Πάμε στο "index.html" file για να αλλάξουμε το γραμματοσειρά μας. Θα το κάνουμε μέσο του tailwindcss.com (https://tailwindcss.com/docs/text-color)
+  και προσθέτουμε "<body class="text-gray-200">".
+  Έπειτα αλλάζουμε το font-family (https://tailwindcss.com/docs/font-family) και επιλέγουμε δεξιά "customization" (https://tailwindcss.com/docs/font-family#customizing-your-theme),
+  και βάζουμε padding bottom. "<body class="text-gray-200 font-sans pb-8">"
+δ)Αν θέλουμε να κάνουμε load κάποιο φόντο που έχουμε αποθηκεύσει τοπικά κάπου πρέπει να το κάνουμε import.
+  δ1)template/index.html και κάνουμε αντιγραφή τα παρακάτω. Έτσι κάνουμε import το font Roboto
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  δ2)template/assets/video κάνουμε αντιγραφή το φακελο με τα βίντεο και τον κανουμε past στο app/assets του app μας. Έτσι θα κάνουμε load τα βίντεο
+  που έχουμε αποθηκεύσει τοπικά στο υπολογιστή μας.template/assets/images Το ίδιο και με τα images.
+  Σε αυτό το σημείο έχουμε φτιάξει τη γενική εικόνα. Μόλις βάλαμε ένα βίντεο να παίζει σαν φόντο και προσθέσαμε τις είκονες μέσα στις cards,
+  Το βιντεο δε θα παίξει μόνο του αν δεν κάνει κάποια ενέργει ο χρήστης.
+5)Create user module : ng generate module user (έτσις λέμε στο cli ότι θέλουμε να δημιουργήσουμε ένα νέο module αρχείο με όνομα user)
+  Με δημιουργία ενός Module έχουμε τη δυνατότητα να κάνουμε import/export files στην εγαρμογή μας ανάλογα με τα χαρακτηριστηκά του.
+  Έτσι το user.module.ts θα κάνει import/export όλα τα χαρακτηριστηκά ενός user.
+  α)Κάνουμε import { UserModule } from './user/user.module';
+6)Create navigation component: ng generate component nav
+  α)Από το "app.component.html" παίρνουμε όλα τα html αρχεία που σχετίζονται με το header δηλ το navigation bar που δημιουργήσαμε και τα προσθέτουμε στο
+    nav.component.html.
+  β)Στον "app.component.html" στη θέση των αρχείων του header προσθέτουμε "<app-nav></app-nav>"
+7)Create user authentication modal: ng generate component user/auth-modal(parent component)
+  α)Από το "app.component.html" παίρνουμε όλα τα html αρχεία που σχετίζονται με το Auth-Modal και τα προσθέτουμε στο auth-modal.component.html.
+  β)Στον "app.component.html" στη θέση των αρχείων του Auth-Modal προσθέτουμε "<app-auth-modal></app-auth-modal>".
+  Διαπιστώνουμε ότι βγάζει error ο compiler ότι δεν έχει δηλωθεί ο auth-modal componen. Βλέπουμε όμως ότι στο "user.module.ts" έχει γίνει import
+  o AuthModuleComponent. Για να μπορέσει όμως να χρησιμοποιηθεί στο υπόλοιπο app και ν γινει προσβηβάσιμος απο το "app.module.ts" πρέπει να γίνει
+  export από τον "user.module.ts". Στο "user.module.ts" στο @NgModule προσθέτουμε ένα extra πεδίο, ώστε να είναι πσοβηβάσιμος, το:
+  exports: [
+    AuthModalComponent
+  ]
+  γ)Εδώ προσθέσαμε στο "auth-modal.component.html" τα αρχεία από το "index.html" από το "Tabs - Registeration form". Ξεχωρίσαμε αυτά τα templates διότι
+  έχουν από μόνα τους ξεχωριστές λειτουγίες και κατά αυτό το τρόπο θα έχουνε πιο εύκολη διαχείρηση. Στη προκειμένη περίπτωση θα περιέχεται όλη η
+  λογική για το authorization του κάθε χρήστη.
+  δ)Στη κορυφή του template στον parent component έχουμε προσθέσει το <app-modal></app-modal> δλδ τον child component καθώς θέλουμε να εμφανίζεται
+  ο modal component  σε αυτό το σημείο.
+8)Create shared module: ng generate module shared
+9)Create shared componen: ng generate component shared/modal.(child component) Θα επικεντρώνεται στη visibility of the modal
+  α)Σε αυτό το  component έχουμε προσθέσει όλα τα modals που αφορούν τα χαρακτυριστηκά για τη καρτέλα πάνω στην οποία θα εμφανίζεται οι login/Registeration forms.
+  β)Στο τέλος το component προσθέσαμε το <ng-content></ng-content>. Με αυτό το τρόπο επιτρέπουμε την εμφάνση κάποιου template δυναμικά από το parent component στον
+  child component.
+10)α)Από τον "modal.component.html" στο πεδίο του Title προσθέσαμε: <ng-content select="[heading]"></ng-content>
+  β)και μεταφέραμε : <p class="text-2xl font-bold" heading>Your Account</p> βάζοντας και το  attribute heading
+12)Create Services: ng generate service services/modal
+
+DEPENDECNY INJECTION SOS:
+Είναι έμα σύστημα της Angular που επιτρέπει τη χρήση μεταβλητών σε μια κλάση από κάποια άλλη κλάση. Αυτό επιτυγχάνεται με την χρήση του constructor.
+Στη κλάση που θέλουμε να καλέσουμε τις μεταβλητές μας δίνουμε ως  εισαγωγη μια public property με τύπο το όνομα της κλάσης από την οποία την καλούμε.
+constructor(public modal: ModalService){
+    console.log(this.modal.visible)
+  }
+Αυτό τη τεχνική τη χρησιμοποιούμε αντί να φτιαχνουμε κάθε φορα καινούριο αντικειμενο όπως στη javascript
+
+HOW TO MAKE A CLASS INJECTABLE SOS:
+α)Through GLOBAL level (suggested)
+  import { Injectable } from '@angular/core';
+
+  @Injectable({
+    providedIn: 'root'
+  })
+β)Through MODALS
+  β1)Αφαιρούμε το "providedIn" και αφήνουμε μόνο: @Injectable()
+  β2)Πάμε στο module.ts που θέλουμε να εμφανίζονται οι μεταβλητές μας και κάνουμε import την Injectable class και
+    βάζουμε ως attribute providers:[ ModalService ]:
+    import { ModalService } from '../services/modal.service';
+γ)Through COMPONENTS
+  γ1)Πάμε στο component που θέλουμε να μεφανίζεται και προσθέτουμε εκεί τους providers:[ ModalService ]:
+    @Component({
+    selector: 'app-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.css'],
+    providers: [ ModalService ]
+  })
+
+OPENING THE MODAL:
+α)Πάμε στο component που θέλουμε να ανοίγουμε και να κλείνουμε ,"modal.component.html". Εκεί προσθέτουμε το μηχανισμό που θα κάνει visible or not
+  το template:  [ngClass]="{ hidden: !modal.isModalOpen() }". Επίσης, στο "modal.service.ts" φτίαχνουμε τις απαραιτητες συναρτήσεις που θέλουμε να
+  να πραγματοποιήσουμε.
+β)Έπειτα, πάμε στο template του component στον οποίο γίνεται το click event δλδ στο  navigation bar που φτιάξαμε:
+  <a class="px-2" href="#" (click)="openModal($event)">Login / Register</a>
+  Επίσης, στο "modal.service.ts" φτίαχνουμε τις απαραιτητες συναρτήσεις που θέλουμε να
+  να πραγματοποιήσουμε.
+CLOSING THE MODAL:
+α)"modal.component.html" υπάρχει το <-Μodal BG Overlay -> εκεί θέλουμε να βάλουμε το click event το οποίο θα κλείνει το modal:
+  <!-- Modal BG Overlay --> ΠΑΤΑΜΕ ΣΤΟ BG ΚΑΙ ΚΛΕΙΝΕΙ
+    <div class="fixed inset-0 transition-opacity"
+    (click)="closeModal()">
+      <div class="absolute inset-0 bg-gray-800 opacity-75"></div>
+    </div>
+  <!-- Modal Close Button --> ΠΑΤΑΜΕ ΣΤΟ Close Button ΚΑΙ ΚΛΕΙΝΕΙ
+    <div class="modal-close cursor-pointer z-50"
+      (click)="closeModal()">
+      &#x2715;
+    </div>
+β)"modal.component.ts" Εδώ αρχικοποιούμε στο component τη συνάρτηση που θα κλείσει το modal:
+  closeModal(){
+    this.modal.toggleModal();
+  }
+13)
+a)Create Tabs: ng g c shared/TabsContainer (g c = generate)
+b)Create a Tab: ng g c shared/Tab
+
+UPDATING THE CONFIGURATION
+1)"tsconfig.json" στο "noPropertyAccessFromIndexSignature" -> "false": Αυτό το αλλάζουμε γιατί σε καινούρια εκδοση της Angular για να χρησιμοποιήσουμε
+μια μεταβλητη και να εχουμε προσβαση σε αυτή λέγαμε "form['name']" ενώ τώρα "form.name".
+
+REGISTERATION FORM
+1)"user.module.ts" :
+  import { ReactiveFormsModule } from '@angular/forms';
+2)a)"register.component.ts": import { FormGroup} from '@angular/forms' allow us to register a new form, allow us to create a container for a
+  single form inside the class.
+  b)registerForm = new FormGroup({      //a new instance of the form group object.
+
+  })
+3)"register.component.ts": import { FormGroup, FormControl} from '@angular/forms'
+  For its value in our form we need to create a new instance to control it. We place an emty value because the user will give the input:
+  registerForm = new FormGroup({
+    name: new FormControl(''),
+    email: new FormControl(''),
+    age: new FormControl(''),
+    password: new FormControl(''),
+    confirm_password: new FormControl(''),
+    phoneNumber: new FormControl('')
+  }).
+  In ANgular dev tools in the Browser we can see in the register form our controls.
+4)BIND THE FORM:
+  a)<form [formGroup]="registerForm">
+  b) In every input in the form we need to add the form controler we inisialized in the component. We can check it in angular dev tools in
+  register form at value attribute. We can see that angular stores the value from the input field.
+  <input formControlName="name" type="text"
+  <input formControlName="email" type="email"
+  <input formControlName="age" type="number" ........the same for every input. We can check the Angular dev tools
+5)FORM VALIDATION: (https://angular.io/api/forms/Validators)
+  a)import { FormGroup, FormControl, Validators} from '@angular/forms'
+  We have to ways to add a Validators from the link above we can be guided.
+  b1)In the component
+  registerForm = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
+    ]),
+   })
+  b2)In the template with html syntax:
+  <input formControlName="name" type="text"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Name" minLength(3) />
+  c)ERROR MESSAGES FOR INVALID values:
+    c1)We want to catch the error in the registerForm in the name input. For simple apps we can track the error with the path in angular dev tools
+      <p> {{registerForm.controls.name?.errors | json }} </p>
+      However, if we develop a bigger and more complex app the most efficient way is to use the get() func with tha 'name' property.
+      <p> {{registerForm.get('name')?.errors | json }} </p>
+      We use the json pipe to print the exact error in angular dev tool. Now we will place a friendly message for the user.
+    c2)After the input we chose the place we will print the FRIENDLY ERROR MESSAGE. We create a <p> and we use the condition of the error message.
+     <p *ngIf="registerForm.controls.name.errors?.required" is the same with *ngIf="registerForm.get('name').errors?.required". In the paragrapg tags
+     we place the errormessage we want.
+    c3)Here is an error message about the minLength.
+      <p *ngIf="registerForm.controls.name.errors?.minlength"
+        class="text-red-400">
+        The value you inputted is {{ registerForm.get('name')?.errors?.minlength.actualLength }} characters long.
+        It must be at least {{ registerForm.get('name')?.errors?.minlength.requiredLength }} characters long.
+      </p>
+  d)AbstractControl: (https://angular.io/api/forms/AbstractControl) check the properties field
+    d1)https://angular.io/api/forms/AbstractControl#properties check the properties for the error messages on the Link. They are not required but
+      they are useful. We use them according to our need. We use the 'touch' and 'dirty'.With we will accoplished to not print an error message to the user
+      from the beginning.
+6)CREATE Input COMPONENT: ng g c shared/Input
+  Here we will place all the inputs of the form. THis way, we will organize a lot our template.
+  A)We place the input field and the error messages from the register template to the input. To handle the erros, we have to export the Input component
+  from the "shared.module.ts"
+  B)"input.component.ts":
+    @Input() control: FormControl = new FormControl()
+  C)"register.component.html" at the place of the input filed we place "<app-input></app-input>".
+    There we will need to push through the value of 'name' property: <app-input [control]="registerForm.controls.name"></app-input>
+    c1)"register.component.ts": we will make some changes.
+    name = new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
+      ])
+      email = new FormControl('')
+      age = new FormControl('')
+      password = new FormControl('')
+      confirm_password = new FormControl('')
+      phoneNumber = new FormControl('')
+
+      registerForm = new FormGroup({
+        name: this.name,
+        email: this.email,
+        age: this.age,
+        password: this.password,
+        confirm_password: this.confirm_password,
+        phoneNumber: this.phoneNumber
+      }) //a new instance of the form group object.
+      We placed the input values as class properties and we gave the values of them as attributes of an Object in the registerForm instance.
+    c2)After these, the component can recognise the properties of the form.
+      Then: <app-input [control]="name"></app-input>
+  D)"input.component.html":
+    In the <ng-content> we will place the conditions of printing the error messages
+    <input [formControl]="control" type="text"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Name" />
+    <ng-container *ngIf="control.touched && control.dirty">
+      <!-- Error Messages -->
+      <p *ngIf="control.errors?.required"
+        class="text-red-400"> <!-- same: *ngIf="control.get('name').errors?.required" -->
+        Field is required
+      </p>
+      <p *ngIf="control.errors?.minlength"
+        class="text-red-400">
+        The value you inputted is {{ control.errors?.minlength.actualLength }} characters long.
+        It must be at least {{ control.errors?.minlength.requiredLength }} characters long.
+      </p>
+    </ng-container>
+
+  ****** NOTE ******
+  ng-container: will always render the content
+  ng-template: content must be conditionally rendered
+
+  We will make a few changes to make our form more Dynamic. According to the type of the input field we will render a different placeholder for example.
+
+  E)VALIDATING INPUTS DYNAMICALLY
+    e1)"input.component.ts":
+      @Input() type = "text"
+      @Input() placeholder = ""
+      We do this because we have different input and we want to dynamically changes the type + placeholder.
+    e2)[type]="type" + [placeholder]="placeholder"
+      <input [formControl]="control" [type]="type"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      [placeholder]="placeholder" />
+      and in "register.component.html" --> <app-input [control]="name" placeholder="Enter Name"></app-input>
+    e3)VALIDATION Email: (https://angular.io/api/forms/Validators#email)
+      <app-input [control]="email" type="email" placeholder="Enter Email"></app-input>
+      End we place the Validators in "register.component.ts":
+        email = new FormControl('', [
+          Validators.required,
+          Validators.email
+        ])
+    e3)"input.component.html": we enter <p> with the error message for the email.We make a condition. IF there is an error message on the email
+      input field you will print this the following message.
+      <p *ngIf="control.errors?.email" class="text-red-400">
+        You must enter a valid email.
+      </p>
+    e4)VALIDATING NUMBERS: (https://angular.io/api/forms/Validators#min)
+      <app-input [control]="age" type="age" placeholder="Enter Age"></app-input>
+      End we place the Validators in "register.component.ts":
+        age = new FormControl('', [
+          Validators.required,
+          Validators.min(18),
+          Validators.max(120)
+        ])
+      "input.component.html":
+        <p *ngIf="control.errors?.min" class="text-red-400">
+          Value too low.
+        </p>
+        <p *ngIf="control.errors?.max" class="text-red-400">
+          Value too high.
+        </p>
+    e5)VALIDATING PASSWORD: (https://angular.io/api/forms/Validators#pattern)
+      <app-input [control]="password" type="password" placeholder="Enter Password"></app-input>
+      <app-input [control]="confirm_password" type="password" placeholder="Confirm Password"></app-input>
+      End we place the Validators in "register.component.ts": (https://regexr.com/) tool to help us at the content of validation. We search for Password
+      through the "Community Patterns/Password Validation". Then we copy the expression " /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm "
+      password = new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm)
+      ])
+      confirm_password = new FormControl('', [
+        Validators.required,
+      ])
+    e6)INPUT MASKING (phone number field):
+      It's likely you will need to format a fields value.For example, phone numbers have the first three numbers wrapped with parentheses.
+      This formatting may vary from country to country.If we're asking for a phone number, we should receive it in the correct format.
+      By default, browsers don't format values.Whatever we type into the input is what we get. We can't expect users to format a value correctly.
+      They may make mistakes or have no idea how to format a phone number.If we want to force formatting,
+      we could implement something called input masking.
+      There are various ways to add input masking to an app. We will provide a library called NGS Mask. A plugin to help us with the input masking
+
+    SETUP: npm install ngx-mask
+    a)"shared.module.ts":
+      import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
+      and we place at the imports only the NgxMaskDirective and at the prividers the provideEnvironmentNgxMask
+      imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgxMaskDirective
+      ],
+      providers: [
+        provideEnvironmentNgxMask(),
+      ]
+    b)"input.component.ts":
+      @Input() format = ""
+    c)"input.component.html": we place the [mask]="format"
+      <input [formControl]="control" [type]="type"
+        class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+        [placeholder]="placeholder" [mask]="format" />
+  F)SUBMIT FORM:
+    f1)We will submit the form after we change the "valid" propery of the form. We use the "disabled: boolean" property of the element
+      and we say. Whe this form is disabled then the registerForm is invalid.(https://angular.io/api/forms/FormGroup) FormGroup properties
+      "register.component.html":
+        <button type="submit"
+          class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+            hover:bg-indigo-500"
+            [disabled]="registerForm.invalid">
+          Submit
+        </button>
+
+    f2)then we will change the appearance of the button based on the disabled property: (https://tailwindcss.com/docs/hover-focus-and-other-states#disabled)
+        <button type="submit"
+          class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+            hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400"
+
+            [disabled]="registerForm.invalid">
+    f3)"register.component.html":
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+        The (ngSubmit) function is the same us (submit) function with a main difference. The (ngSubmit)="" func doesnt do automacially refresh the Browser.
+        That's why we choose ngSubmit.
+
+    f4)ALERT COMPONENT: ng g c shared/alert
+        we create this component to give the user an alert message after the submition of the form.
+
+    f5)"alert.componet.html":
+        <div class="text-white text-center font-bold p-4 mb-4 rounder-md"
+        [ngClass]="bgColor">
+          <ng-content></ng-content>
+        </div>
+
+    f6)"alert.component.ts":
+        export class AlertComponent {
+          @Input() color = 'blue'
+
+          get bgColor(){
+            return `bg-${this.color}-400`
+          }
+        }
+
+    f7)Unfortunately, tailwind will not be able to understand what we're trying to accomplish.
+      "tailwind.config.js":
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,ts}'],
+          safelist: ['bg-blue-400', 'bg-green-400', 'bg-red-400'],
+          theme: {
+            extend: {},
+          },
+          plugins: [],
+        }
+
+    f8)"register.component.html": at the top of the template outside the form element we call the alert component:
+        <app-alert *ngIf="showAlert" [color]="alertColor">
+          {{ alertMsg }}
+        </app-alert>
+
+    f9)"register.component.ts":
+      there we create the variables of the alert message and the refister function:
+        showAlert = false
+        alertMsg = 'Please wait! Your account is being created'
+        alertColor = 'blue'
+        .....
+        register(){
+          this.showAlert = true
+          this.alertMsg = 'Please wait! Your account is being created'
+          this.alertColor = 'blue'
+       }
+  LOGIN FORM:
+  A)
+  a1)"user.module.ts": we use an alternative way of handling forms the "Template Form"
+    import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+  a2)"login.component.html":
+    Now, if we hover on the form element we will notice that we are using an ngForm value (https://angular.io/api/forms/NgForm). This is imported
+    from the FormsModule. Check the Properties in the link.
+    We will start with the ngModel:
+    <input type="email" name="email" ngModel
+  a3)TWO WAY BINDING:
+    Two way binding is a feature for being able to listen to events and update values simultaneously.
+    <input type="email" name="email" [(ngModel)]="credentials.email"
+    we can check the values in angular dev tool like we did in register form
+  B)
+  b1)"login.component.html":
+    The harsh character allows us to declare a variable in the template after typing this character, we need to provide a name for our variable.
+    <form #loginForm="ngForm">
+  b2)VALIDATING EMAIL: (https://regexr.com/)
+    "login.component.html":
+    <form #loginForm>
+    .....
+    <input #email="ngModel"
+        type="email" name="email" [(ngModel)]="credentials.email"
+        class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+          duration-500 focus:outline-none rounded bg-transparent
+          focus:border-indigo-400"
+        placeholder="Enter Email"
+        required
+        pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+        />
+      The required and pattern are the validator for the email. The #email="ngModel" We will add a template variable called email.
+      We will set the email variable to the Energy Model Directive.The new model, DirecTV, is responsible for creating an instance
+      of the form control object. If we want to access the form control, we must set our variable to this directive.
+    b3)
+        <p *ngIf="email.errors && email.touched && email.dirty" class="text-red-400">
+          Email is invalid
+        </p>
+    C)
+      c1)VALIDATING PASSWORD: (https://regexr.com/)
+        we do the same steps as the validation of the email
+        "login.component.html":
+        <input #password="ngModel"
+        type="password" name="password" [(ngModel)]="credentials.password"
+        class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+        placeholder="Password"
+        required
+        />
+        <p *ngIf="password.errors && password.touched && password.dirty" class="text-red-400">
+          Password is invalid
+        </p>
+    D)SUBMIT LOGIN FORM:
+      "login.component.html":
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+      .....
+      <button type="submit" [disabled]="loginForm.invalid"
+        class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+          hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400">
+        Submit
+      </button>
+
+SETUP FIREBASE (database): https://firebase.google.com/
+1)go to console
+2)create a project, name the project
+3)disable google analytics for this project
+4)sidebar/build/firestor database/create database
+5)start in test mode
+6)eur3 (Europe)
+7)review the rules of database
+8)sidebar/build/firestor database/rules
+9)Choose web app, add name and dont check the fibase hosting
+10)register
+11)INSTALL AngularFire:
+  Links
+  Firebase Web Setup: (https://firebase.google.com/docs/web/setup)
+  AngularFire: (https://firebaseopensource.com/projects/angular/angularfire2/)
+  1)To avoid errors at the installation, go to "tsconfig.json" and add "{ "compilerOptions": { "skipLibCheck": true, } }".
+  The skipLibCheck setting stops TypeScript from type-checking files in the node_modules directory.
+  However, type-checking will remain enabled for code in the src directory,
+  so you still benefit from type-checking. Be sure to add this option to your configuration before proceeding.
+  2)ng add @angular/fire
+  3)dont select any of the other questions asked
+12)Import Firebase: select the Firebase configuration(just the Object)
+  ng g environments: "src/environments/...." in each file add:
+  firebase: {
+    apiKey: "AIzaSyACEdcuBSV2qEG6mBNGqWkGw0kUMPyR6XU",
+    authDomain: "clips-3baee.firebaseapp.com",
+    projectId: "clips-3baee",
+    storageBucket: "clips-3baee.appspot.com",
+    messagingSenderId: "127658179934",
+    appId: "1:127658179934:web:839db1dc5addcc340123cf"
+  }
+  and we delete this property "messagingSenderId: "127658179934","
+12)"app.module": there we will import the Angular fire base and the environments
+  import { AngularFireModule } from '@angular/fire/compat'
+  import { environment } from 'src/environments/environment.development';
+  import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+  ....
+  imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
+  ]
+  In the imports we will use the 'initializeApp(environemet.firebase)'. We will call this function with the credentials we had in the environment file.
+  The initialize app function will connect our Angular app to Firebase.Regardless of what services or products you plan on using, you will always want to import the core
+  module.The core module is what will help you with configuring and connecting to Firebase. In almost all cases you will need to import this module.
+  We're importing the authentication module because we'll be using Firebase to authenticate the user.
+13)REGISTER USERS:
+  We're going to register the user by submitting their data to Firebase. We're going to need to turn on the authentication feature in Firebase before we can do so.
+  Otherwise, Firebase will reject our authentication requests.
+  a)firebase/go to console/sidebar/build/authentication/get started/sign-in method/
+    we choose the email/password option and we anable only the email option.
+    Now we can add users.
+14)"register.component.ts":
+  a)import { AngularFireAuth} from '@angular/fire/compat/auth';
+  b)constructor(private auth: AngularFireAuth){}
+  c)async register(){
+    this.showAlert = true
+    this.alertMsg = 'Please wait! Your account is being created'
+    this.alertColor = 'blue'
+
+    const { email, password } = this.registerForm.value
+
+    const userCred = await this.auth.createUserWithEmailAndPassword(
+      email as string, password as string
+    )
+  }
+  we made asynctronus the register func and we will create the authentication of the user using a function from firebase the"createUserWithEmailAndPassword()"
+  In this function we will give as inputs the email and password. In latest versions of Angular we have to initialize the type of these properties.
+  Also, we create a new object and add the values of email+password from the 'registerForm.value'
+  d)
+  inSubmission = false
+  ....
+  async register(){
+    this.showAlert = true
+    this.alertMsg = 'Please wait! Your account is being created'
+    this.alertColor = 'blue'
+    this.inSubmission = true
+
+    try{
+      const { email, password } = this.registerForm.value
+
+      const userCred = await this.auth.createUserWithEmailAndPassword(
+        email as string, password as string
+      )
+      console.log(userCred)
+    }catch(e){
+      console.error(e)
+
+      this.alertMsg = "An unexpected error occured. Please try again later."
+      this.alertColor = 'red'
+      this.inSubmission = false
+
+      return //we return the functioon because if we dont code outside of the catch block may execute
+    }
+
+    this.alertMsg = "Success! Your account has been created."
+    this.alertColor = 'green'
+  }
+  Next, we use a try & catch. We do this because we need to catc an unexpected error an provide a message to the user.
+  After this submition of our form in the app we will receive an error or succed message. Moreover, we can check if the proccess works by going
+  to our firebase project, at the user field and check if there is a created user
+  e)"register.component.html": we add the inSubmission function with an 'or' statement
+  <button type="submit"
+    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+      hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400"
+      [disabled]="registerForm.invalid || inSubmission">
+    Submit
+  </button>
+15)STORING DATA IN DATABASE:
+Now we want to store the user's data in the datbase.Firebase offers a service for directly communicating with the database
+We need to import a module.
+  a)"app.module.ts"
+  import { AngularFirestoreModule} from '@angular/fire/compat/firestore'
+  The module will expose services to our components. They're accessible in every component.
+  b)"register.component.ts":
+  import { AngularFirestore } from '@angular/fire/compat/firestore';
+  ...
+  constructor(
+      private auth: AngularFireAuth,
+      private db: AngularFirestore
+    ){}
+  ...
+  try{
+    const { email, password } = this.registerForm.value
+
+    const userCred = await this.auth.createUserWithEmailAndPassword(
+      email as string, password as string
+    )
+    this.db.collection('users').add({
+      name: this.name.value,
+      email: this.email.value,
+      age: this.age.value,
+      phone: this.phoneNumber.value
+    })
+  }catch(e)
+  We import the AngularFirestore in our component file and we add in the constructor a new variable named 'private db: AngularFirestore'.
+  Next, we will call the 'collection()' function that allows us to have access in Firebase's collections.
+  There, we add the attributes of the user we want to store in the firebase.
+  NOTE: The FireStore database will create an "id" field for us for every user and we don't need to do it manually
+  c)Go to Firestore sidebar/firebase database and you will see the stored data of the created user.
+16)ng g service services/auth:
+We create a service file for managing the actions of authentication. More precisely, the actions of AngularFireAuth & AngularFireStore
+17)Now we will move all the functionality of creating a user in the service file.
+a)"register.component.ts": take all the code from the "try{}" and past it in the "auth.service.ts" file.
+There we will modify the code to surpass the errors.
+b)Cut:
+import { AngularFireAuth} from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+...
+ constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore)
+  { }
+c)"auth.service.ts": modify the pasted code form register component.
+public async createUser(userData){
+  const userCred = await this.auth.createUserWithEmailAndPassword(
+    userData.email, userData.password
+  )
+  this.db.collection('users').add({
+    name: userData.name,
+    email: userData.email,
+    age: userData.age,
+    phone: userData.phoneNumber
+  })
+}
+d)"register.component.ts": then we will import the auth service file and call the createUser function in "try{}" function
+import { AuthService } from 'src/app/services/auth.service';
+...
+constructor(
+  private auth: AuthService
+){}
+...
+try{
+  await this.auth.createUser(this.registerForm.value)
+}
+In the last line, in "try" func we call the "createUser()" from the auth service and we are passing the user data from the "registerForm.value" filled by the user.
+e)To fix the userData type error we will create an interface, in which we are passing the types of user's data values.
+  e1)create a folter with model/user.module.ts: here we will add the new interface for a user
+  export default interface IUser {
+    email: string,
+    password: string,
+    age: number,
+    name: string,
+    phoneNumber: string
+  }
+  e2)"auth.service.ts": we import IUser
+  import IUser from '../models/user.model';
+  ....
+  public async createUser(userData: IUser)
+  e3)"register.component.ts:
+  import IUser from 'src/app/models/user.model';
+  ....
+  await this.auth.createUser(this.registerForm.value as IUser)
+  the error still remains and this is why there is a conflict with the type of the age property.
+  we have to initialize the type of age
+  age = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(18),
+    Validators.max(120)
+  ])
+f)test
+NOTE:
+We can create a class model instead of n interface.
+export default class IUser {
+  email?: string;
+  password?: string;
+  age?: number;
+  name?: string;
+  phoneNumber?: string
+}
+16)In the future, we may need to modify the user data. For this reason, we will add a generic in the collection()
+a)"auth.service.ts":
+this.db.collection<IUser>('users').add({
+  name: userData.name,
+  email: userData.email,
+  age: userData.age,
+  phoneNumber: userData.phoneNumber
+})
+Now, an error will be occured. To counter this error, we will make the password property "optional".
+"user.model.ts"
+export default interface IUser {
+  email: string,
+  password?: string,
+  age: number,
+  name: string,
+  phoneNumber: string
+}
+b)"register.component.ts": here we have an error with the userData.password which is said that the password property is emty. To counter this error we will make a condition for the password
+in which we will check if the password is emty
+if(!userData.password){
+    throw new Error("Password not provided!")
+}
+17)Now we will use an other function from the firebase
+"auth.service.ts":
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+...
+ private usersCollection: AngularFirestoreCollection<IUser>
+
+  constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore)
+  {
+    this.usersCollection = db.collection('users')
+  }
+usersCollection is a helper private property which has access in the collections field in the firebase and more  specifically in 'users'.
+Then, we will replace our code with this usersCollection property:
+await this.usersCollection.add({...})
+18)MATCH THE UID: (https://firebase.google.com/docs/reference/js/auth#createuserwithemailandpassword)
+We will search for  "User/UserInfo/uid". In 'UserInfo" we have all the user's info
+
+Now we will match the user's id with the id stored in the dfatabase
+if you see in the firestore database the uid is not the same with the id that is generated by registering a user.
+a)"auth.service.ts":
+if(!userCred.user){
+    throw new Error("User can't be found")
+}
+await this.usersCollection.doc(userCred.user.uid).set({
+  name: userData.name,
+  email: userData.email,
+  age: userData.age,
+  phoneNumber: userData.phoneNumber
+})
+//displayName:https://firebase.google.com/docs/reference/js/auth.userinfo.md#userinfo_interface
+await userCred.user.updateProfile({
+  displayName: userData.name
+})
+we changed the add({}) func with the set({}) func because set() allows us to add or modify a property in the data base
+19)MODIFY THE DATABASE RULES
+GO to Firestor database/ rules and add:
+...
+ match /{document=**} {
+      allow read:  if true;
+      allow write: if request.auth.uid != null
+    }
+20)AYTHENTICATION AFTER REGISTERATION
+The authentication is all about the token which is created after we register a new account. On this point, we need to notice that, we don't
+need to modify our code but Firebase sends a token to the database on our behalf. It stores the token after the registeration and send it with a request
+a)we go to our database and we delete all the created users. NOT the collection but just the users. Creating a new user will add initialize
+token we need to authenticate our users
+b)we're going to subscribe to an observable for checking if the user is logged in. The angular fire package provides an observable for the currently authenticated user.
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+...
+ private isAuthenticated$: Observable<boolean>
+
+  constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore)
+  {
+    this.usersCollection = db.collection('users')
+    this.isAuthenticated$ = auth.user.pipe(
+      map(user => !!user)
+    )
+  }
+Now, we create an observable an we add a generic to describe the type (boolean). We pass the observable from the constructor.
+The last step is to initiate this property with an observable in the constructor function.
+We will set the is authenticated property to the affect user observable. And errors thrown our way.
+We will push an object called user or null. We will need to transform the value pushed by the user observable to a Boolean.
+We can use pipe operator to transform the type of the observable. Next, we are going to add the map operator to the pipe.
+Inside the map operator, we will pass in a function for accepting the user argument. We will return the user argument with the double negation operator.
+This single line will typecast the user argument into a Boolean value, we can subscribe to this observable from our components
+c)SUBSCRIBE AN OBSERVABLE FROM TEMPALTE: (https://angular.io/api/common/AsyncPipe) we will use an async pipe operator here.
+c1)"nav.component.ts": we import the AuthService to push the authentication values
+import { AuthService } from '../services/auth.service';
+....
+  constructor(
+    public modal: ModalService,
+    public auth: AuthService
+  ){}
+c2)Second, we will set the promices.
+"nav.component.html"
+<!-- Navigation Links -->
+        <li *ngIf="!(auth.isAuthenticated$ | async); else authLinks">
+          <a class="px-2" href="#" (click)="openModal($event)">Login / Register</a>
+        </li>
+        <ng-template #authLinks>
+          <li>
+            <a class="px-2" href="#">Manage</a>
+          </li>
+          <li>
+            <a class="px-2" href="#">Upload</a>
+          </li>
+        </ng-template>
+        <li>
+          <a class="px-2" href="about.html">About</a>
+        </li>
+      </ul>
+In login/register button oin the nav bar we placed the logic to appear only if the user is not authenticated. We use an async logic.
+Existing operators will be applied to the value if we want to apply the negation operator after a valuehas been pushed.
+We need to wrap the is authenticated, observable with parentheses.
+The logic for the buttons that will appear if the user is authenticated will be placed on the ng-tempplate,in whinch we place the other buttons.
+d)INITIALIZE FIREBASE FIRST: (https://firebase.google.com/docs/web/setup)
+"main.ts":
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment.development';
+import { enableProdMode } from '@angular/core';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth'
+
+if(environment.production){
+  enableProdMode();
+}
+
+firebase.initializeApp(environment.firebase)
+
+let appInit = false
+
+firebase.auth().onAuthStateChanged(() =>{
+  if(!appInit){
+    platformBrowserDynamic().bootstrapModule(AppModule)
+      .catch(err => console.error(err));
+  }
+  appInit = true
+})
+e)SETUP THE LOGIM:
+Generally we follow the same logic with registeration
+"login.component.ts":
+showAlert , alertColor , alertMsg , isSubmission
+"login.component.html":
+<button type="submit" [disabled]="loginForm.invalid || isSubmission"
+f)DESTRY THE MODAL:
+  f1)"app.component.ts":
+  import { AuthService } from './services/auth.service';
+  ...
+  constructor(
+    public auth: AuthService
+  ){}
+  f2)"app.component.html":
+  at the bottom,
+  <app-auth-modal *ngIf="!(auth.isAuthenticated$ | async)"></app-auth-modal>
+  f3)"shared/modal.component.ts": OnDestroy
+  import { Component, Input, OnInit, ElementRef, OnDestroy } from '@angular/core';
+  ...
+  export class ModalComponent implements OnInit, OnDestroy
+  ...
+  ngOnDestroy(): void {
+    document.body.removeChild(this.el.nativeElement)
+  }
+  f4)DELAY OPERATOR:
+  The problem of deleting the modal is tyhat it is happened really quickly. Now we need to delay the deletion.
+  "auth.service.ts": here we add the delay() operator
+  import { delay, map } from 'rxjs/operators';
+  ...
+  constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore)
+  {
+    this.usersCollection = db.collection('users')
+    this.isAuthenticated$ = auth.user.pipe(
+      map(user => !!user)
+    )
+    this.isAuthenticatedWithDelay$ = this.isAuthenticated$.pipe(
+      delay(1000)
+    )
+  }
+  "app.component.html": we replace the isAuthenticated$ with isAuthenticatedWithDelay
+  <app-auth-modal *ngIf="!(auth.isAuthenticatedWithDelay$ | async)"></app-auth-modal>
+g)SIGNING OUT USER:
+"nav.component.html":
+<li>
+  <a class="px-2" (click)="logout($event)">Logout</a>
+</li>
+"nav.component.ts":
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+...
+ constructor(
+    public modal: ModalService,
+    public auth: AuthService,
+    private afAuth: AngularFireAuth
+  ){}
+  ...
+  async logout($event: Event){
+    $event.preventDefault()
+
+    await this.afAuth.signOut()
+  }
+  Firebase provides a method called signOut that can automacially singout the user with a single line of code
+
+
+CUSTOM VALIDATORS
+1)CREATE VALIDATION CLASS:
+First we will check if the password match with the confirm_password!To do so we need access to the form group.
+We will create a new class accessible from our templates and insert there the validation rules.
+type:
+"ng g class user/validators/RegisterValidators":
+"register-validators.component.ts":
+import { ValidationErrors, AbstractControl } from "@angular/forms";
+
+export class RegisterValidators {
+  static match(group: AbstractControl): ValidationErrors | null{
+    const control = group.get('password')
+    const matchingControl = group.get('confirm_password')
+
+    if(!control || !matchingControl){
+      return { controlNotFound: false}
+    }
+
+    const error = control.value === matchingControl.value ?
+    null:
+    { noMatch: true}
+
+    return error
+  }
+}
+"register.component.ts":
+In the FormGroup we add a new argument the RegisterValidators.match. This way we added an array of validation functions
+ registerForm = new FormGroup({
+    name: this.name,
+    email: this.email,
+    age: this.age,
+    password: this.password,
+    confirm_password: this.confirm_password,
+    phoneNumber: this.phoneNumber
+  }, [RegisterValidators.match('password', "confirm_password")])
+2)FACTORY FUNCTIONS:
+import { ValidationErrors, AbstractControl, ValidatorFn } from "@angular/forms";
+
+export class RegisterValidators {
+  static match(controlName: string, matchingControlName: string): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const control = group.get(controlName);
+      const matchingControl = group.get(matchingControlName);
+
+      if (!control || !matchingControl) {
+        console.error('Form controls cannot be found in the form group');
+        return { controlNotFound: true };
+      }
+
+      const error = control.value === matchingControl.value ? null : { noMatch: true };
+      matchingControl.setErrors(error);
+
+      return error;
+    };
+  }
+}
+3)"input.component.html":
+  <p *ngIf="control.errors?.noMatch" class="text-red-400">
+    Passwords do not match.
+  </p>
+
+VALIDATE THE EMAIL
+1)ng g class user/validators/EmailTaken
+"email-take.component.ts":
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { Injectable } from "@angular/core";
+import { AsyncValidator, AbstractControl, ValidationErrors } from "@angular/forms";
+
+@Injectable()
+export class EmailTaken implements AsyncValidator {
+  constructor(
+    private auth: AngularFireAuth
+  ){}
+
+  validate(control: AbstractControl): Promise<ValidationErrors | null>{
+
+     return this.auth.fetchSignInMethodsForEmail(control.value).then(           //https://firebase.google.com/docs/reference/js/auth#fetchsigninmethodsforemail
+      responce => Response.length ? { EmailTaken: true} : null
+    )
+  }
+}
+2)"register.component.ts":
+import { EmailTaken } from '../validators/email-taken';
+...
+ email = new FormControl('', [
+    Validators.required,
+    Validators.email
+  ], [this.emailTaken.validate])
+3)VALIDATE THE EMAIL
+"email-taken.component.ts": we make the va;idate() function in to arrow func to counter an error.
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { Injectable } from "@angular/core";
+import { AsyncValidator, AbstractControl, ValidationErrors } from "@angular/forms";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EmailTaken implements AsyncValidator {
+  constructor(
+    private auth: AngularFireAuth
+  ){}
+
+  validate = (control: AbstractControl): Promise<ValidationErrors | null> => {
+
+     return this.auth.fetchSignInMethodsForEmail(control.value).then(           //https://firebase.google.com/docs/reference/js/auth#fetchsigninmethodsforemail
+      responce => responce.length ? { EmailTaken: true} : null
+    )
+  }
+}
+4)"input.component.html":
+  <p *ngIf="control.errors?.EmailTaken" class="text-red-400">
+    Email taken! Please try another email.
+  </p>
+
+
+
+ROUTING SOS
+In the configuration of our app we had selected the option "create routing". For this reason, angular app had automatically created
+the "app-routing.module.ts" and made the initial imports. Now we are going to connect our app with the wanted Routes.
+1)Registering Routes:
+ng g component Home: we create this component to transfare the templates from the "app.component.html" like "Intro Section" and "Main Content".
+Then, we past the templates in the "home.component.html".
+2)Home Route
+"app-routing.module.ts":
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  {path: '', component: HomeComponent}
+];
+Here we imported the component we are going to create a route for. In the array of Routes we can add only objects with specific parameteres
+like the 'path' we follow in the URl and the component that we are routing the template. For home page routing we let the path always empty
+3)About Route:
+ng g component About:
+a)From the template folder we take from the "about.html" the "Main Content" part an place it in the "about.component.html" file.
+After this we create the routes in the "app-routing.module.ts".
+import { AboutComponent } from './about/about.component';
+
+const routes: Routes = [
+  {path: '', component: HomeComponent},
+  {path: 'about', component: AboutComponent}
+];
+b)Add the Navigation:
+"nav.component.html"
+<a class="text-3xl text-indigo-400 font-bold uppercase mr-4" routerLink="/">Clipz</a>
+...
+<a class="px-2" routerLink="/about">About</a>
+To prevent the page to reload every time we change a page we replaced href => routerLink SOS
+4)a)We want to help the user understand in which page is he. To do that angular provides an attribute name routerLinkActive.
+This attributes indicates that the user is on this page. It takes as an attribute a text-color, for example:
+<a class="px-2" routerLink="/about" routerLinkActive="text-indigo-400">About</a>
+b) We follow the same logic to the 'Manage' link. this time we wanted to have a check on it but the link remains active.
+To tackle this matter we will add a part in our code:
+<a class="px-2" routerLink="/"
+  routerLinkActive="text-indigo-400"
+  [routerLinkActiveOptions]="{exact: true}">
+    Manage</a>
+The [routerLinkActiveOptions]="{exact: true}" indicates that you will activate this link only when the user click it.
+5)CREATE A VIDEO MODULE ROUTING
+ng g module Video --routing
+"video-routing.module.ts": here you will notice that we use the forChild function.It's completly different from the forRoot func.
+**forRoot: The four root function will register a service called router.We will get an opportunity to use this service in a future lecture.
+It's a service for interacting with the router in our app.
+**forChild: doent register the service.There isn't a point in registering the service if it's already been registered.
+a)"app.module.ts"
+import { VideoModule } from './video/video.module';
+This way we have access in the "video.module.ts"
+b)ng g component video/Manage: fix the manage component-template
+c)"templates/manage.html" copy "Top bar", "User's Video Section", "Edit MOdal" and paste it in the "manage.component.html" file
+d)"video-routing.module.ts"
+import { ManageComponent } from './manage/manage.component';
+
+const routes: Routes = [
+  {path: 'manage', component: ManageComponent}
+];
+e)"nav.component.html":
+<a class="px-2" routerLink="/manage"
+6)FORCING REDIRECTION:(https://angular.io/api/router/Router)
+In this part we will force the user to navigate in to a specific link after make an action. For example, after logout the app will navigate the user
+in to home page. We will use the "navigateByUrl()".(https://angular.io/api/router/Router#navigatebyurl)
+a)"nav.component.ts":
+we remove the logout function and all parts of routings. Instead, we paste and modify them in:
+"auth.service.ts":
+import { Router } from '@angular/router';
+...
+  constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore,
+    private router: Router
+  )
+...
+  public async logout($event?: Event){
+    if($event){
+      $event.preventDefault()
+    }
+
+    await this.auth.signOut()
+
+    await this.router.navigateByUrl("/")
+  }
+In logout func we make the function public to be accessible to all components and we make the event property optional(?:) to be sure in case of being
+empty. In addition, we check about the null value of $event property
+b)"nav.component.html":
+we update the logout() to auth.logout() because now it is loading from the auth.service.ts
+<a class="px-2" href="#" (click)="auth.logout($event)">Logout</a>
+7)ADDING ROUTE DATA:
+a)"video-routing.component.ts"
+import { ManageComponent } from './manage/manage.component';
+
+const routes: Routes = [
+  {
+    path: 'manage',
+    component: ManageComponent,
+    data: {
+      authOnly: true
+    }
+  }
+];
+b)"auth.service.ts"
+import { ActivatedRoute } from '@angular/router';
+The activated route class is a service we can inject into our components to gather information about the route the user is currently on.
+It's not to be confused with the route or service which provides methods for interacting with the router.
+  constructor(
+    private auth: AngularFireAuth,
+    private db: AngularFirestore,
+    private router: Router,
+    private route: ActivatedRoute
+  )
+***we will use it later****
+8)FILTERING ROUTER EVENTS:
+"auth.service.ts"
+import { Observable, of } from 'rxjs';
+import { delay, map, filter, switchMap } from 'rxjs/operators';
+import { ActivatedRoute, NavigationEnd } from '@angular/router';
+....
+constructor(
+  ....
+  ....
+){
+ this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map(e => this.route.firstChild),
+      switchMap(route => route?.data ?? of({authOnly: false})) //this operator(??) will chech if the value on the left is null or undefined
+    ).subscribe((data) => {
+      this.redirect = data.authOnly ?? false;
+    })
+}
+9)CREATE UPLOAD ROUTING:
+ng g component video/upload:
+a)We transfare the template , the "Main Content", from the templates/upload.html an we plate it in "upload.component.html". Then, we go to the
+"video-routing.module.ts": and we add th routes.
+import { UploadComponent } from './video/upload/upload.component';
+...
+ {
+    path: 'upload',
+  component: UploadComponent,
+  data: {
+    authOnly: true
+  }}
+b)"nav.component.html": add the path
+ <a class="px-2" routerLink="/upload"
+    routerLinkActive="text-indigo-400"
+    [routerLinkActiveOptions]="{exact: true}">
+      Upload</a>
+c)"manage.component.html": update the link:
+ <a routerLink="/upload" class="bg-indigo-400 text-white py-4 px-10 text-xl">
+  Upload Videos
+</a>
+
+10)CREATE CLIPS:
+a)ng g component clip:
+We copy the template "Main Content" and "More Clips" from the templates/video.html and we past it in the "clip.component.html"
+then:
+"app-routing.module.ts"
+import { ClipComponent } from './clip/clip.component';
+...
+{path: 'clip/:id', component: ClipComponent}
+b)CLIPS ID
+"clip.component.ts"
+import { ActivatedRoute } from '@angular/router';
+...
+id = ''
+
+constructor(private route: ActivatedRoute){}
+
+ngOnInit(): void {
+  this.id = this.route.snapshot.params.id
+}
+"clip.component.html":
+<!-- Title and Uploader -->
+<h1 class="font-bold mb-2 text-3xl">
+  {{ id }}
+</h1>
+Snapshot help us keep a few informations about the object we use. This time we need the id. Also, we havent finished the route yet so we place as a title the id
+of the clip we are projecting from the URl.We started to build our identification logic
+c)"clip.component.html"
+ <!-- Video List -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <a routerLink="/clip/b"
+Now if we click on the first video in our app the url will be uploaded
+d)GRAP THE ROUTE PARAMETER:
+"clip.component.ts":
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.id = params.id
+    })
+  }
+11)QUERY PARAMETERS:
+We've talked about the structure of a URL. A URL consists of a domain and path. There's one additional piece of the URL that is completely optional,
+called the query string. We can attach data to the URL through a query string. The server will accept this data.
+Developers will use query strings to filter and sort through data. The format for a query is simple.
+Query strings always begin with a question mark symbol the question mark symbol to note that anything after it is a query parameter.
+Query parameters are key value pairs if you would like to add additional query parameters. They can be separated with an ampersand character.
+In this example, there are two query parameters. The first parameter is called foo with a value of bar.
+And the second parameter is called order with the value of one. We're going to use a query parameter to restore the order of videos
+on the Manage page, and there's routing library supports query parameters.
+FIRST WAY
+a)"manage.component.html":
+ <!-- Sort Videos -->
+    <select (change)="sort($event)"
+
+b)"manage.component.ts":
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+...
+constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ){}
+...
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params: Params)=> {
+      this.videoOrder = params.sort === '2' ? params.sort : '1'
+    })
+  }
+
+
+  sort(event: Event){
+    const { value } = (event.target) as HTMLSelectElement
+
+    this.router.navigateByUrl(`/manage?sort=${value}`)
+  }
+
+SECOND WAY with PATH PARAMETERS:using navigate() function  (https://angular.io/api/router/Router#navigate)
+c)"manage.component.ts":
+sort(event: Event){
+    const { value } = (event.target) as HTMLSelectElement
+
+    this.router.navigate([], {
+      relativeTo: this.route,          //https://angular.io/api/router/UrlCreationOptions
+      queryParams: {
+        sort: value
+      }
+    })
+  }
+d)"nav.component.html":
+<a class="px-2" routerLink="/manage"
+  routerLinkActive="text-indigo-400"
+  [routerLinkActiveOptions]="{exact: true}"
+  [queryParams]="{ sort: '1' }">
+    Manage</a>
+Generally we can check if the value of params changes in the angular dev tools. If we go to the app-manage we can see the video-order parameter with the value ='1'
+In the future,  this value will change according to the order of the uploaded file.
+
+
+NOTE
+Path Parameters: should be used for returning a single resource or mulriple resources.
+Query parametyers: should be used for sorting/filtering through data
+
+11)SELECTING OPTION:
+"manage.component.html"
+<select (change)="sort($event)"
+  class="text-black px-8 text-xl outline-none appearance-none">
+  <option value="1" [selected]="videoOrder === '1'">Recent Uploads</option>
+  <option value="2" [selected]="videoOrder === '2'">Oldest Uploads</option>
+</select>
+now whenever we press the order button we see the value changes at the URL.
+
+12)WILDCARD ROUTES:
+The wildcard routes are initialized in the routes arrey and they symbolized like this '**'
+Then we create a new component the NotFound.
+ng g component NotFound:
+
+There, from the templates/404.html and we copy the 'Main Content' template and paste it in the "not-found.component.html"
+"app-routing.module.ts":
+import { NotFoundComponent } from './not-found/not-found.component';
+...
+{path: '**', component: NotFoundComponent}
+After we navigate in to an unknown page we see our 404 template. However, if press the manage section for example nothing happens.
+The reason the router renders the not found component has to do with the order of roots registered in our app.
+For this reason, we need to open the WILDCARD. If we open the "app.module.ts" we see that the AppRoutingModule is imported faster from the VideoModule
+On this point we will change the order of our imports lik this:
+  imports: [
+    BrowserModule,
+    UserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    VideoModule,
+    AppRoutingModule,
+  ],
+
+13)UPDATING ROUTES:
+"video-routing.component.ts":
+ {
+    path: 'manage-clips',
+    redirectTo: 'manage'
+  }
+  Now we use the redirectTo property with the value of 'manage'. This way we didnt create a new route but we give the oportunity to the user if miss click
+  to navigate at the right direction.
+
+14)ROUTE GUERDS: SOS
+A guard is a function that'll run before navigation is performed.Guards have the final say before the user is navigated to a page.
+"video-routing.module.ts":
+import { AngularFireAuthGuard} from '@angular/fire/compat/auth-guard'
+...
+{
+  path: 'manage',
+  component: ManageComponent,
+  data: {
+    authOnly: true
+  },
+  canActivate: [AngularFireAuthGuard]
+},
+We imported the AngularFireAuthGuard which will guerd(authorize) the navigation from the user. Imagine if the user try to navigate in the manage component
+when he is loggedout the authorization system of the authGuerd will not allow the access.
+Now we will update the imports. We want to redirect the user in to a specific page when he tries to navigate in to a page when he is unauthorized.
+"video-routing.module.ts":
+import { AngularFireAuthGuard, redirectUnauthorizedTo} from '@angular/fire/compat/auth-guard'
+const redirectUnauthorizedToHome = () => redirectUnauthorizedTo('/')
+...
+{
+  path: 'manage',
+  component: ManageComponent,
+  data: {
+    authOnly: true,
+    authGuardPipe: redirectUnauthorizedToHome
+  },
+  canActivate: [AngularFireAuthGuard]
+},
+If this data property is present in the route, the guard will run the pipe function, the pipe function will only run if the guard rejects
+the request out of the box.
+Now the user if he is unauthorized (not loggedin) when he type the manage page on the url he will redirect to the home page.
+
+UPLOADING FILES
+Firebase is our solution. We use it to store user's data in our base, it come with a feature called Cloud Storage.
+This service provides hosting for user generated content. We're going to use it to store the user's file uploads.
+1)Generate a Directive: ng g directive shared/directives/EventBlocker
+After that, we need to export it for being usable to other modules.
+"shared.module.ts"
+exports:[
+  ....,
+  EventBlockerDirective
+]
+and then to be able to use the new directive lets import it in video.module
+"video.module.ts":
+imports: [
+  ...,
+  SharedModule
+]
+2)BLOCKING EVENTS WITH DIRECTIVES
+a)"event-blocker.directive.ts":
+we import the HostListener decorator. First, it also let the host element. Secondly, it will listen to an event on the host.
+We can use this decorator to prevent the default behavior of the host elements events inside the class.
+
+import { Directive, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[app-event-blocker]'
+})
+export class EventBlockerDirective {
+
+  @HostListener('drop', ['$event'])
+  @HostListener('dropover', ['$event'])
+  public handleEvent(event: Event){
+    event.preventDefault()
+  }
+}
+
+The drop event is emitted when the user has released an element or text selection on an element.
+b)"upload.component.html"
+ <!-- Upload Dropbox -->
+<div app-event-blocker
+  class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
+    border-gray-400 transition duration-500 hover:text-white
+    hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
+  <h5>Drop your file here (mp4 only!)</h5>
+This step will stop the default behavior of the browser when we drag and drop a file on the upload template. If we just throw the file on the browser
+will load the file, but now if we drop the file on the field of uploading the file it will be placed there. Still nothing visible happens.
+3)HANDLING DRAG AND DROP EVENTS:
+a)"upload.component.ts"
+export class UploadComponent {
+  isDragOver = false;
+}
+a)"upload.component.html"
+    <!-- Upload Dropbox -->
+    <div app-event-blocker
+      (dragend)="isDragOver = false"
+      (dragover)="isDragOver = true"
+      (dragenter)="isDragOver = true"
+      (dragleave)="isDragOver = false"
+      (mouseleave)="isDragOver = false"
+      (drop)="storeFile($event)"
+      [ngClass]="{
+        'bg-indigo-400 border-indigo-400 border-solid': isDragOver
+      }"
+(dragend)="": The drag end event is emitted when an element is no longer being dragged on.
+(dragover)="": It gets emitted whenever an element or selection is being dragged on.
+(dragenter)="": The element the drag enter event is emitted when the user begins to drag something onto the element.
+(dragleave)="": The drag leave event is emitted when the item that was previously dragged over the element is no longer
+(mouseleave)="": Next, the mouse leave event gets emitted when the mouse is no longer hovering over an element.
+(drop)="": It gets emitted when something is dropped onto the element.
+The drag event is emitted when the element it's applying to is being dragged. For example, if I were to click on the element in
+the browser and begin dragging it, this would trigger the event.
+We're going to set the IS drag over data property to true if the events drag over and drag enter are emitted.
+Both events are emitted when a file hovers over the elements or want to change the drop boxes appearance during these moments.
+Next, we'll set the IS drag over property to false in the drag and drag leave and mouse leave events.
+Both events are emitted when the user stops dragging the file over the elements by setting the property to false.
+We will reset the Dropbox's appearance, thus removing the hover effect.
+
+The ngClass="" will be the condition of the event based on the isDragOver() function.
+Now we will initialze the storFile() function
+b)"upload.component.ts"
+  storeFile($event: Event){
+    this.isDragOver = false
+  }
+
+  Now we can see when we drag a file on the browser that the color of the border is changing
+4)HANDLING FILES:
+"upload.component.ts":
+  file: File | null = null
+  storeFile($event: Event){
+    this.isDragOver = false
+
+    this.file = ($event as DragEvent).dataTransfer?.files.item(0) ?? null
+
+    if(!this.file || this.file.type !== 'video/mp4'){
+      return
+    }
+    console.log(this.file)
+  }
+Here we after we conole log the $event in the browser, we saw that nothing happened. This is because the browser doesnt recognise any file.
+For this reason, we initialiaze a property named file with the type of File or null and with the initial value of null in the beginning. Just logic
+Then, we just initialize the type of the event in the parenthesis as DragEvent. There is function for the files the item(0) in which we gave the
+of 0. This way we select only the top file we placed in the list in other words the last one. Still we see that the file has the null value so we placed the"?."
+Lastly, we have the type error on the file as undefined. To tackle this we placed the "?? null" which means that if returns an undefined value
+make it null.
+Then we make a condition for specific file type. We want the file exist, have file type and be video/mp4 file. THis is optional but we want to
+
+5)MULTI STEP FORM
+We are going to toggle the form after the user has uploaded a file looking at the upload page in the browser. We have a form below the drop box.
+The form has two fields.Users have the option to select a screenshot from their video. The second field will allow them to input a title
+from the beginning. We shouldn't display either field to the user.The form should be hidden until the user has uploaded a file.
+a)"upload.component.ts":
+  file: File | null = null
+  storeFile($event: Event){
+    this.isDragOver = false
+
+    this.file = ($event as DragEvent).dataTransfer?.files.item(0) ?? null
+
+    if(!this.file || this.file.type !== 'video/mp4'){
+      return
+    }
+
+    this.nextStep = true
+  }
+b)"upload.component.html":
+ <!-- Upload Dropbox -->
+    <div *ngIf="!nextStep; else uploadFormCtr"
+      app-event-blocker
+      (dragend)="isDragOver = false"
+      (dragover)="isDragOver = true"
+After that we change the div element in the Video editor with ng-tamplate an there we give the name
+  <!-- Video Editor -->
+    <ng-template #uploadFormCtr>
+If the condition in the ngIf="" is true then the thumpnails will appear.
+6)THE UPOLOAD FORM:
+Here wi will use Reactive Forms to handle the upload of the video.
+a)"video.module.ts":
+import { ReactiveFormsModule} from '@angular/forms';
+b)"upload.component.ts":
+import { FormControl, FormGroup, Validators} from '@angular/forms';
+...
+title = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3)
+  ])
+uploadForm = new FormGroup({
+  title: this.title
+})
+...
+this.title.setValue(
+  this.file.name.replace(/\.[^/.]+$/, '')
+)
+
+uploadFile() {
+    console.log("File uploaded")
+  }
+The setValue function will set the value of the title in the form with the filename.In addition, we added the replace(/\.[^/.]+$/, '') function with these
+properties.This regular expression will remove the file extension from a string. If the regular expression finds a file extension
+we will replace it with an empty string.
+c)"upload.component.html":
+<!-- Form -->
+      <form [formGroup]="uploadForm" (ngSubmit)="uploadFile()">
+      ....
+      ....
+<!-- Title -->
+<div class="mt-4">
+  <label class="block text-xl mb-4">Title</label>
+  <app-input [control]="title" placeholder="Enter Title"></app-input>
+</div>
+Until now, when we upload a video the default title in the field is the name of the file. We can delete it and replace it with somthing ours.
+
+7)UPLOAD FILES WITH FIRABASE:
+a)"app.module.ts"
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+b)"upload.component.ts":
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+...
+constructor(
+  private storage: AngularFireStorage
+){}
+...
+uploadFile() {
+  const clipPath = `clips/${this.file?.name}`
+}
+File organizations should always be a top priority.We're not going to directly store the file in the storage.
+We will allocate clips to a specific folder called clips.This step is optional but recommended.
+If a directory doesn't exist within the storage service, Firebase will create it for you.
+Alternatively, we have the option of creating the folder manually in the Firebase console will let Firebase handle it.
+
+c)UUID: (https://www.npmjs.com/package/uuid) The EU aid package exports a set of functions for generating a unique ID rather than generating the
+ID ourselves.
+install: npm i uuid @types/uuid
+d)"upload.component.ts":
+import { v4 as uuid } from 'uuid';
+...
+uploadFile() {
+  const clipFileName = uuid()
+  const clipPath = `clips/${clipFileName}.mp4`
+
+  this.storage.upload(clipPath, this.file)
+}
+8)FIREBASE RULES AND VALIDATION
+NOw we finished the code for uploading a file in FIREBASE. We follow the same logic as with the users.
+GO to Firebase storage and start a new bucket to upload the user files. We choose the production option:
+...
+ match /{document=**} {
+    allow read:  if true;
+    allow write: if request.auth != null &&
+    request.resource.contentType == 'video/mp4'&&
+      request.resource.size >= 1 * 1000 * 1000 && // 1MB
+      request.resource.size <= 1 * 1000 * 1000 * 1000; // 1GB
+  }
+Now if you add the files you will see th clips folder and inside the file uploaded.
+RULES:
+allow read:  if true; : this rule make the clips accessible for any visitor of the site. It doesnt matter if he has an account.
+allow write: if request.auth.uid != null && : this rule allows to write or modify a clip.
+request.resource.contentType == 'video/mp4'&& : this rule make a restriction to the type of the file that the user is able to upload
+request.resource.size >= 1 * 1000 * 1000 && // 1MB:
+request.resource.size <= 1 * 1000 * 1000 * 1000; // 1GB;: make a restriction about the size of the file. 1MB<=size<=1GB
+
+9)ADDING AN ALERT COMPONENT:
+"upload.component.ts"
+we follow the same logic as before
+"upload.component.html"
+we follow the same logic as before
+
+10)UPLOAD PROGRESS(100%) OBSERVABLE:
+a)"upload.component.ts"
+percentage = 0;
+...
+const task = this.storage.upload(clipPath, this.file)
+
+task.percentageChanges().subscribe(progress => {
+  this.percentage = progress as number/100
+})
+We store the upload proccess of the file in the 'task' property to create next a new observable the will be called with the percentageChanges().
+b)"upload.component.html"
+<app-alert *ngIf="showAlert" [color]="alertColor">
+  <p>{{ alertMsg }}</p>
+  <p>{{ percentage | percent}}</p>
+</app-alert>
+
+11)HANDLING ERRORS AND SUCCESSFUL UPLOAD:
+a)"upload.component.ts"
+import { last } from 'rxjs/operators';
+...
+showPercentage = false;
+...
+this.showPercentage = true
+...
+task.snapshotChanges().pipe(
+  last()
+).subscribe({
+  next: (snapshot) => {
+    this.alertColor = 'green'
+    this.alertMsg = 'Success! Your clip is now ready to share with the world.'
+    this.showPercentage = false
+  },
+  error: (error) => {
+    this.alertColor ='red'
+    this.alertMsg = 'Upload failed! Please try again later.'
+    this.inSubmission = true
+    this.showPercentage = false
+    console.log(error)
+  }
+})
+This way we handle the errors in the upload compoent. When we upload a file and subscribe it .subscribe(console.log) we will see that the
+uploading face of the file has different steps. Untile the last one which is success. In the pipe() we past the last() operator which can ditect
+and throw the last update of the uploaded file, succeeded or not. This last value we will return it by subscribing it in the observable.
+Then, we have 2 options to caugth an error. Errors can be caught by using object syntax inside this object. Let's define the next and error function
+
+b)"upload.component.html"
+    <!-- Video Editor -->
+    <ng-template #uploadFormCtr>
+      <app-alert *ngIf="showAlert" [color]="alertColor">
+        <p>{{ alertMsg }}</p>
+        <p *ngIf="showPercentage">{{ percentage | percent}}</p>
+      </app-alert>
+
+12)STORING THE FILE DATA:
+a)"upload.component.ts"
+We're going to start by creating an object representing the data we'd like to store in the database.
+
+import { last, switchMap } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import firebase from 'firebase/compat/app';
+...
+user: firebase.User | null = null
+...
+constructor(
+  private storage: AngularFireStorage,
+  private auth: AngularFireAuth
+){
+  auth.user.subscribe(user => this.user =user)
+}
+...
+const clipPath = `clips/${clipFileName}.mp4`
+...
+const clipRef = this.storage.ref(clipPath)
+...
+ task.snapshotChanges().pipe(
+      last(),
+      switchMap(() => clipRef.getDownloadURL())
+    ).subscribe({
+      next: (url) => {
+        const clip = {
+          uid: this.user?.uid,
+          displayName: this.user?.displayName,
+          title: this.title.value,
+          fileName: `${clipFileName}.mp4`,
+          url
+        }
+
+        console.log(clip)
+
+        this.alertColor = 'green'
+        this.alertMsg = 'Success! Your clip is now ready to share with the world.'
+        this.showPercentage = false
+      },
+
+We upload a file but with dont have crucial inforamations about it, such as the title and who uploaded the file. For this reason we create an objectin the next()
+function. The clip constant will contain all peace of informations we need to store about an uploaded clip. The uid and the display name will be
+available by the authentication service of the user. It's going to help us connect the file with the uploader information about the user.
+There's another object we're going to import called Firebase from the Firebase slash compat slash app package.
+We're importing this package to grab an interface. There's one final piece of information will want to store the URL to the file should be stored in this
+object.We can't play the clip if we don't know where it's stored publicly. The URL is not easily accessible unless we create a reference.
+A reference object points to a specific file in our storage by creating a reference.The ref function will create a reference to a file.
+A reference can be created before the upload is complete.If the file doesn't exist, Firebase will create a temporary placeholder for you.
+After grabbing a reference, we can access a public URL to the file.Here's the problem we need to subscribe to an observable to get this value.
+The get download DRL function returns and observable by returning this observable.The Switch Map operator will subscribe and push the value from the subscription.
+
+13)ADDING THE FILE DATA TO THE DATABASE:
+a)Crerate a service: ng g service services/clip
+b)"services/clip.service.ts":
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+c)Type checking is a priority so we will create a new model file for clips and will add the the types of the uploaded file. After that,
+we will add a generic to initialize the type
+
+"clip.model.ts"
+export default interface IClip {
+  uid: string;
+  displayName: string;
+  title: string;
+  fileName: string;
+  url: string;
+}
+
+"services/clip.service.ts":
+import IClip from '../models/clip.model';
+....
+public clipsCollection: AngularFirestoreCollection<IClip>
+
+constructor(
+    private db: AngularFirestore
+  ) {
+    this.clipsCollection = db.collection('clips')
+  }
+
+  async createClip(data: IClip){
+    await this.clipsCollection.add(data)
+  }
+The collection function will select a collection from our database for this example.The name of our collection will be called clips.
+This collection doesn't exist, but that's perfectly fine, Firebase will create it for us.We will finalize the service by creating a
+function for adding a new clip to the collection defining
+
+NOTE:There are two functions for adding a document to a collection.The first function is the set function.
+This function is what we use to add the user to the user's collection.The second function is called add.
+The difference between the two is that the set function will allow you to assign a custom ID to the document.
+The add function will instruct Firebase to generate an ID for you.
+
+c)After we finishe this we will inject it in th upload component
+"upload.component.ts":
+import { ClipService } from 'src/app/services/clip.service';
+...
+constructor(
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth,
+    private clipsService: ClipService
+  ){
+    auth.user.subscribe(user => this.user =user)
+  }
+... then we will call the clipsService, the function to create a clip. we have an error there and will be tackled by add the types to every property
+of clips.
+....
+.subscribe({
+      next: (url) => {
+        const clip = {
+          uid: this.user?.uid as string,
+          displayName: this.user?.displayName as string,
+          title: this.title.value as string,
+          fileName: `${clipFileName}.mp4`,
+          url
+        }
+
+      this.clipsService.createClip(clip)
+Right now, if we go to the Firebase we will see that there already is a clips folder.Delete it and after that try to upload a new file.
+Then, a folder clips will be created and in the folder ther will be th  video we uploaded earlier.In addition, in the Firestore Database will be
+a clips folder as well we the proper information of the file.
+
+14)FIREBASE REFERENCES AND SNAPSHOTS
+References: can be used to manipulate the data in your application
+Snapshots: are read only objects and this makes them memory efficient. Snapshots are usually returned whenever you listen to changes
+using a reference.You can't create a snapshot directly.It's created for you during events.
+
+15)DISABLING FORM
+The user is able to manipulate the form while uploading a file.Then the file is uploaded without a title for example. We have to disable this action.
+a)We will call the disable( )function for the uploadForm because we want to disable every action before and while submit the form. This action will
+take place in the error case of our scenario.
+"upload.component.ts"
+ uploadFile() {
+    this.uploadForm.disable()
+    ...
+    error: (error) => {
+      this.uploadForm.enable()
+
+Now the user is not able to do changes while uploading a file. Now, the user cannot upload a file without a title.
+
+16)FALLBACK UPLOAD
+There are diffirent browsers and each one of them is efficient to somthing specific. For example, some them are enabling the drag and drop action
+and others not. Here is a link of them (https://caniuse.com/dragndrop)
+In our case we want to enable the file upload action with a different way other than drag and drop. We will place an input action.
+a)"upload.component.html"
+<!-- Upload Dropbox -->
+<ng-container *ngIf="!nextStep; else uploadFormCtr">
+  <div
+    app-event-blocker
+    (dragend)="isDragOver = false"
+    (dragover)="isDragOver = true"
+    (dragenter)="isDragOver = true"
+    (dragleave)="isDragOver = false"
+    (mouseleave)="isDragOver = false"
+    (drop)="storeFile($event)"
+    [ngClass]="{
+      'bg-indigo-400 border-indigo-400 border-solid': isDragOver
+    }"
+    class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
+      border-gray-400 transition duration-500 hover:text-white
+      hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
+    <h5>Drop your file here (mp4 only!)</h5>
+  </div>
+  <input type="file" class="mt-4" (change)="storeFile($event)">
+</ng-container>
+
+We modified the upload action. We created a ng-container with the ngIf logic an in there we place the new input and the drag & drop action
+b)Now we need to check if the file is uploaded by the drag&drop action or by the input action
+"upload.component.ts"
+storeFile($event: Event){
+    this.isDragOver = false
+
+    this.file = ($event as DragEvent).dataTransfer ?
+      ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
+      ($event.target as HTMLInputElement).files?.item(0) ?? null
+
+First, we're asserting the type of the target property to each HTML input element.
+This assertion is to prevent TypeScript from complaining about the property not existing.
+Next, we're calling the item function on the files property to grab the first file.
+Lastly, we're using the nolice coalescing operator to return null if we can't find a file.
+
+17)CANCEL THE UPLOADS
+a)"upload.component.ts"
+import { Component, OnDestroy } from '@angular/core';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
+...
+task?: AngularFireUploadTask //its optional
+
+Then, we will replace every 'task' property with 'this.task' property.
+b)Last, we will set the ngOnDestroy()
+ngOnDestroy(): void {
+    this.task?.cancel()
+  }
+If try to upload a file and then change a page we will see in the dev tools at network section the cancelation of the event.
+
+18)REDIRECTION AFTER UPLOAD
+When we upload a file we want to help the user understand who upload a clip. We will use the id of the user to have access to this peace of information
+a)"clip.service.ts"
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/compat/firestore';
+...
+ createClip(data: IClip): Promise<DocumentReference<IClip>>{
+    return this.clipsCollection.add(data)
+  }
+
+In our service, we have a method called Create Clip.This method is responsible for inserting a document into the clips collections.
+Let's hover our mouse over the ad function.The return value of this function will be a promise.
+The promise resolves to a document reference since we've passed on a generic to the collection.
+The document will be formatted similarly to the I clip model instead of returning nothing.Let's return this promise.
+We should annotate the return value.Instead of using the async await keywords, we can remove them completely in their place.
+We can return the promise.We're returning the promise because it'll resolve to a document.
+This document will contain the ID, which the upload component will need to redirect the user.The promise will be handled by the upload component.
+
+b)We need to modify a few lines because we are return a promise. That is whe we nee to make the next() async
+"upload.component.ts"
+      next: async (url) => {
+        const clip = {
+          uid: this.user?.uid as string,
+          displayName: this.user?.displayName as string,
+          title: this.title.value as string,
+          fileName: `${clipFileName}.mp4`,
+          url
+        }
+
+        const clipDocRef = await this.clipsService.createClip(clip) //we store it in a variable to use it in the future.
+
+Then:
+import { Router } from '@angular/router';
+...
+constructor(
+  ...
+  private router: Router
+){...}
+then we wil create a timeout with duration of 1000ms
+...
+ setTimeout(() =>{
+    this.router.navigate([
+      'clip', clipDocRef.id
+    ])
+  },1000)
+  Now if we have a test we will see after the upload of the file we will redirect on the file but with the title its id.
+
+18)STORING A TIMESTAMP
+a)"upload.component.ts"
+const clip = {
+    uid: this.user?.uid as string,
+    displayName: this.user?.displayName as string,
+    title: this.title.value as string,
+    fileName: `${clipFileName}.mp4`,
+    url,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }
+We want to sort the clips that were uploeded by using a TIMESTAMP.
+We accessing an object called Fire Store.This object contains methods and properties related to the database service.
+Every service offered by Firebase can be found under a specific object.In our case, we're using fire store.
+The field value property is an object with methods for generating valid values for a document.
+If we hover our mouse over this property, the description says the following sentinel values that can be used when writing document fields with set or update.
+It doesn't say in the description, but the values generated with this method can be used with the add function from this object.
+We are calling a method called server timestamp.Users can be from different time zones for consistency.
+We should stick to a single time zone.The server timestamp function will return a timestamp from the server's time zone.
+
+b)Now we need to modify the clip model. We use a property type from the firebase this is why we need to import it
+"clip.model.ts"
+import firebase from "firebase/compat/app";
+
+export default interface IClip {
+  uid: string;
+  displayName: string;
+  title: string;
+  fileName: string;
+  url: string;
+  timestamp: firebase.firestore.FieldValue;
+}
+
+19)QUERYING DATABASE
+We will try to make users to be able to edit, delete or modify posts. To do that we need to retrieve data from the database.
+First we will create the comunication with the database. We will ask the FireBase to return to us data of the user.
+a)"clip.service.ts"
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+....
+private auth: AngularFireAuth
+...
+public getUSerClips(){
+  return this.auth.user.pipe(
+    switchMap(user => {
+      if(!user){      //we check if there is the current user. If there is not it returns an empty arrey with the of()
+        return of([])
+      }
+
+      const query = this.clipsCollection.ref.where(
+        'uid', '==', user.uid  //this will check if the uid of the clip is equal with the users id who is logged in
+      )
+
+      return query.get()
+    })
+  )
+}
+
+b)Now, we will grab the users clips and sunscribe them
+"manage.component.ts"
+ ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params: Params)=> {
+      this.videoOrder = params.sort === '2' ? params.sort : '1'
+    })
+    this.clipService.getUserClips().subscribe(console.log)    //we use this to grab the observable
+  }
+
+20)STORING THE LIST OF CLIPS
+a)"clip.service.ts"
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
+import { switchMap, map } from 'rxjs/operators';
+...
+map(snapshot => (snapshot as QuerySnapshot<IClip>).docs)
+
+b)"manage.component.ts"
+import IClip from 'src/app/models/clip.model';
+...
+clips: IClip[] = []  //this way we indicates that there will be an array of IClip type
+...
+ ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params: Params)=> {
+      this.videoOrder = params.sort === '2' ? params.sort : '1'
+    })
+    this.clipService.getUserClips().subscribe(doces =>{
+      this.clips = []
+
+      doces.forEach(doc =>{
+        this.clips.push({
+          docID: doc.id,
+          ...doc.data()
+        })
+      })
+    })    //we use this to grab the observable
+  }
+  there is type error on the docID and we need to add the type in the clip.model.ts and the error will disappear
+  export default interface IClip {
+    docID?: string;
+
+21)RENDERING THE LIST OF CLIPS:
+First of all, we will delete all the dummy elements from the manage template. We dont need them because we add an upload clip in the list dynamically
+After this, we will add the ngFor="let clip of clips" to create the list of the uploaded files that will be draged from the clips[] array.
+Then, we will place in the listed items the tilte of the clip.
+"manage.component.html"
+!-- User's Video Section -->
+<div class="container mx-auto my-8">
+  <!-- Video List -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div *ngFor="let clip of clips" class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
+    ...
+    <!-- Link -->
+    <a href="" class="font-bold mb-2">
+      {{ clip.title }}
+    </a>
+
+22)CREATING A FORM FOR EDITING A CLIPS
+First we need to to create a component for the model
+a)ng g component video/edit
+b)"manage.component.html" from here we cut the "Edit Modal" and we past it in the "edit.component.html" After this, we will replace the div tag
+which surounds our form and place tthe app-modal tag. The moral component will project content passed into it.
+"edit.component.html"
+<!-- Edit Modal -->
+<app-modal modalID="editClip">
+  <p class="text-2xl font-bold">Edit Video</p>
+......
+The ID for the modal will be called Edit Clip.Our model uses an ID system for identifying different models.
+Every model should have a unique ID along with passing in an ID.
+c)"edit.component.ts"
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ModalService } from 'src/app/services/modal.service';
+
+@Component({
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.css']
+})
+export class EditComponent implements OnInit, OnDestroy {
+  constructor(
+    private modal: ModalService
+  ){}
+
+  ngOnInit(): void {
+    this.modal.register("editClip")
+  }
+
+  ngOnDestroy(): void {
+    this.modal.unregister("editClip")
+  }
+}
+we set up the ngOnInit function to register the modal when the component starts and the ngOnDestroy to uregister the modal when the component is
+destroyed.
+
+d)Then we will load the edit component
+"manage.component.html"
+....
+<app-edit></app-edit>
+e)then, we wil ladd the click event. We use the $event property to prevent the default behaviour and the clip obgject cause this is what we will
+modify.
+<!-- Actions -->
+<div class="flex text-center text-2xl bg-gray-800 p-2 mt-auto">
+  <a (click)="openModal($event, clip)"
+f)Now we will add the logic of the previous click event for EDITING
+"manage.component.ts"
+import { ModalService } from 'src/app/services/modal.service';
+...
+private modal: ModalService
+....
+....
+ openModal($event: Event, clip: IClip){
+    $event.preventDefault()
+
+    this.modal.toggleModal('editClip') //to toggle a modal we need to pass the id of the edited clip
+  }
+
+23)PASSING ON THE CLIP DATA:
+a)'manage.component.ts'
+activeClip: IClip | null = null
+...
+openModal($event: Event, clip: IClip){
+    $event.preventDefault()
+
+    this.activeClip = clip  //we pass on the clip object in the activeClip property
+
+    this.modal.toggleModal('editClip')
+  }
+b)'manage.component.html'
+<app-edit [activeClip]="activeClip"></app-edit>
+c)"edit.component.ts"
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ModalService } from 'src/app/services/modal.service';
+import IClip from 'src/app/models/clip.model';
+...
+@Input() activeClip: IClip | null = null
+
+Now we can passing on the data from a clip.GO to the manage page and open the angular dev tools. Click on the app-edit and you will see the
+activeClip = null property. Then, if you click the edit button on a clip, in the activeClip property there will be the informations of the
+current clip.
+
+24)BINDING THE EDIT FORM (SUBMIT THE EDIT FORM):
+a)We will transform the edit form in to Reactive Form !!!
+"edit.component.ts"
+import { FormControl, FormGroup, Validators, onChanges } from '@angular/forms';
+...
+title = new FormControl('', [
+  Validators.required,
+  Validators.minLength(3)
+])
+editForm = new FormGroup({
+  title: this.title
+})
+
+NOTE:Unfortunately, we aren't informed of the changes to our components properties.
+Luckily, components have a lifecycle function to watch for changes at the top of the file.
+We're going to import an interface called onChanges.The onChanges interface will force our component to define a method called energy on changes.
+This method will be called whenever a component's properties are updated by a parent component.
+....
+ngOnChanges(){
+  if(!this.activeClip){
+    return;
+  }
+
+  this.clipID.setValue(this.activeClip.docID ?? '') //this send a type error that the docID is undefined.So we use " ?? '' "
+  this.title.setValue(this.activeClip.title)
+}
+b)"edit.component.html"
+<!-- Form -->
+  <form [formGroup]="editForm">
+  ...
+  and we replace the input with the app-input for the title
+<!-- Title -->
+  <div class="mt-4">
+    <label class="block text-xl mb-4">Title</label>
+    <app-input [control]="title" placeholder="Enter Title"></app-input>
+  </div>
+25)UPDATING CLIPS
+a)we take copy and past the data from the upload.component.html and modify them for the edit
+"edit.component.html"
+<!-- Alert Message -->
+  <app-alert *ngIf="showAlert" [color]="alertColor">
+    <p>{{ alertMsg }}</p>
+  </app-alert>
+  ...
+  <button [disabled]="inSubmission"
+    [ngClass]="{
+      'opacity-50': inSubmission,
+      'hover: bg-indigo-700': !inSubmission
+    }"
+    type="submit"
+    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 focus:outline-none">
+    Update
+  </button>
+b)now we inisialize the properties and create the error messages
+"edit.component.ts"
+inSubmission = false
+showAlert = false
+alertColor = 'blue'
+alertMsg = 'Please wait! Updating clip.'
+...
+submit(){
+  this.inSubmission = true
+  this.showAlert = true
+  this.alertColor = 'blue'
+  this.alertMsg = 'Please wait! Updating clip.'
+}
+
+c)we update the data of the clip in the database by creating the updateClip() func
+"clip.service.ts"
+updateClip(id: string, title: string) {
+  return this.clipsCollection.doc(id).update({
+    title
+  }) //from the collection we select a document(clip) from its id
+}
+d)we import the clipService to use the updateClip() function and we finish the alert messages after the submission of the form.
+"edit.component.ts"
+import { ClipService } from 'src/app/services/clip.service';
+...
+private clipService: ClipService
+...
+try {
+  await this.clipService.updateClip(
+    this.clipID.value as string, this.title.value as string
+  )
+} catch (error) {
+  this.inSubmission = false
+  this.alertColor ='red'
+  this.alertMsg = 'Something went wrong. Try again later.'
+  return
+}
+
+this.inSubmission = false
+this.alertColor = 'green'
+this.alertMsg = 'Success!'
+
+The only thing we need to do, is to send back to the user the changes that he might do. In otherwords, to upadte the list of clips.
+
+26)UPADATE THE LIST OF CLIPS:
+a)
+"edit.component.ts"
+import {
+  Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter
+} from '@angular/core';
+...
+@Output() update = new EventEmitter()
+...
+async submit(){
+    if(!this.activeClip){
+      return
+    }
+
+    this.inSubmission = true
+    this.showAlert = true
+    this.alertColor = 'blue'
+    this.alertMsg = 'Please wait! Updating clip.'
+
+    try {
+      await this.clipService.updateClip(
+        this.clipID.value as string, this.title.value as string
+      )
+    } catch (error) {
+      this.inSubmission = false
+      this.alertColor ='red'
+      this.alertMsg = 'Something went wrong. Try again later.'
+      return
+    }
+
+    this.activeClip.title = this.title.value as string //there is an error here about the type.This is why here and try{} we use the as string
+    this.update.emit(this.activeClip)
+
+    this.inSubmission = false
+    this.alertColor = 'green'
+    this.alertMsg = 'Success!'
+  }
+NOTE: I tackled the type error for the title and clipID by using the " as string" decorator. An other option is to create a new IClip object with
+the modified values and passing it throw the emit() func. like this:
+const updatedClip: IClip = {
+    ...this.activeClip,
+    title: this.title.value
+  };
+this.update.emit(updatedClip);
+
+This way there is no need to handle the type checking.
+
+b)We add the update() with an event.
+"manage.component.html"
+<app-edit [activeClip]="activeClip"
+(update)="update($event)">
+
+</app-edit>
+c)There are different ways to inform the parent component of the clip to update.
+Theoretically, we could store the index, but I think looping through the array of clips will be easier.We already have the documented.
+We might as well use it inside this function loop through the clips array with the for each function.
+We're going to pass in a function to handle each iteration with each iteration.We're going to accept the elements and index.
+Next, inside the function will use a conditional statement to check if the Element Duck ID property
+is equal to the event Typekit ID property.
+If this condition turns out to be true, we all know which clip to update inside the condition, set the this dot clips.
+I got title property to the event title property.
+"manage.component.ts"
+ update($event: IClip){
+    this.clips.forEach((element, index)=> {
+      if(element.docID == $event.docID){
+        this.clips[index].title = $event.title
+      }
+    })
+  }
+d)There is an error when we successfully edit a clip. THe success message still remains. Lets fix it.
+We will go to the ngOnChanges() and add the inSubmission and showAlert properties to false. NOw its done.
+"edit.component.ts"
+ngOnChanges(){
+  if(!this.activeClip){
+    return;
+  }
+
+  this.inSubmission = false
+  this.showAlert = false
+  this.clipID.setValue(this.activeClip.docID ?? '')
+  this.title.setValue(this.activeClip.title)
+}
+
+27)DELETING A CLIP FROM THE STORAGE/DATABASE
+we have two locations where we need to delete the clip.First, the file is in storage and the document is in database.
+a)First we will add the click event with the deleteClip() function with parameteres an $event and the clip that will be deleted.
+"manage.component.html"
+<a (click)="deleteClip($event, clip)" href="#" class="flex-1 p-2 rounded-br-2xl transition hover:text-indigo-400">
+  <span class="material-icons text-base">delete</span>
+</a>
+b)we will define the deleteClip method with the same parameteres.
+"manage.component.ts"
+deleteClip($event: Event, clip: IClip){
+  $event.preventDefault()
+
+  this.clipService.deleteClip(clip)
+}
+c)we need to define the deleteClip method to the clip.service.ts. If we want to make requests to the database we need to use an asynctronus method.
+Moreover, to communicate with the storage we need to import the AngularFireStorage
+"clip.service.ts"
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+...
+private storage: AngularFireStorage
+...
+async deleteClip(clip: IClip){
+  const clipRef = this.storage.ref(`clips/${clip.fileName}`) //we follow the path/reference of the file in the storage/clips/clip.filename
+
+  await clipRef.delete() //We delete the selected file from the storage
+
+  await this.clipsCollection.doc(clip.docID).delete() //we delete the document
+}
+d)we need to define the delete rule in the FireBase/storage/rules
+match /{document=**} {
+  allow read:  if true;
+  allow write: if request.auth != null &&
+    request.resource.contentType == 'video/mp4'&&
+    request.resource.size >= 1 * 1000 * 1000 && // 1MB
+    request.resource.size <= 1 * 1000 * 1000 * 1000; // 1GB
+  allow delete: if request.auth != null;
+}
+
+e)The last thing we need to do. The clip will appear on the list because it's in the eclipse array.It will need to be removed.
+"manage.component.ts"
+deleteClip($event: Event, clip: IClip){
+  $event.preventDefault()
+
+  this.clipService.deleteClip(clip)
+
+  this.clips.forEach((element, index)=> {
+    if(element.docID == clip.docID){
+      this.clips.splice(index, 1)  //the splice func will remove items from an array
+    }
+  })
+}
+
+28)SORTING CLIPS WITH BEHAVIOUR
+NOTE:
+Behaviour subject:Normally, we can subscribe to observables to wait for values pushed by the observable.
+Subscribers don't have the power to force the observable to push a new value.This is not true for behavior subjects.
+A subject can push a value while being subscribed to an observable.We can create an object that acts like an observable and observer.
+a)We need to create a new BehaviourSubject. To do that we need these:
+"manage.component.ts"
+import { BehaviorSubject } from 'rxjs';
+...
+sort$: BehaviorSubject<string> //a behaviour subject needs to initiate the type of observable
+{
+  this.sort$ = new BehaviorSubject(this.videoOrder) //then we create a new instance
+}
+b)next, we want to pass in the getUserClips(this.sort$). To do that we need to let it pass from the clip.service.ts.
+"clip.service.ts"
+import { of, BehaviorSubject, combineLatest } from 'rxjs'; //the combineLatest: it's going to help us with subscribing to multiple observables.
+...
+...
+ getUserClips(sort$: BehaviorSubject<string>){
+    return combineLatest([     //we use the combineLatest() func and as properties we pass in an array with auth.user,sort$
+      this.auth.user,
+      sort$
+    ]).pipe(
+      switchMap(values => {    //change the user with values
+        const [user, sort] = values  //create an array with [user, sort] and place the values in it
+
+        if(!user){      //we check if there is the current user. If there is not it returns an empty arrey with the of()
+          return of([])
+        }
+
+        const query = this.clipsCollection.ref.where(
+          'uid', '==', user.uid  //this will check if the uid of the clip is equal with the users id who is logged in
+        ).orderBy(     //Last, we use the orderBy() with timestamp and sort
+          'timestamp',
+          sort === '1' ? 'desc' : 'asc' //if sort==='1' then 'desc' else 'asc'
+        )
+
+        return query.get()
+      }),
+      map(snapshot => (snapshot as QuerySnapshot<IClip>).docs)
+    )
+  }
+c)We are updating the video order property, which contains these sorting direction.
+It's the perfect time to push a value after updating the video order property.
+Push a new value with the next function on these sort observable.The value to push will be the video order property.
+"manage.component.ts"
+ngOnInit(): void {
+  this.route.queryParams.subscribe((params: Params)=> {
+    this.videoOrder = params.sort === '2' ? params.sort : '1'
+    this.sort$.next(this.videoOrder)   //These sort observable will always push these same sorting order.It should push a new value whenever the user changes the order.
+  })
+
+  After all these firbase will throw an error about Indexes.
+
+29)COMPOSITE INDEXES
+You can think of an index as a table of contents for your data.
+Firebase will automatically create indexes for your data and index is created for each property in a document.
+However, we're sorting documents by two properties.We're using the UID and timestamp properties to query the database.
+Firebase doesn't know how to source these two properties.Luckily, we can teach Firebase new indexes in your browser.
+
+a)GO to FirebaseStore/indexes/create index.
+Collection ID: clips
+Field path: uid  , Ascending
+Field path: timestamp  , Ascending
+Query scope: Collection
+
+b)and we do the same one more time
+Collection ID: clips
+Field path: uid  , Ascending
+Field path: timestamp  , Descending
+Query scope: Collection
+Then we wait for firabase to build the new indexes and we will refresh our app.
+NOW if change the the order of our clip with recent/older we will see the differences.
+END
+
+
+WEBASSEMBLY & RUST SOS
+
+RUST
+Windows Install: https://www.rust-lang.org/tools/install
+
+
+FFmpeg
+Is a cross-platform tool for  processing video and audio files.We can convert file types, change bit rates, resize a video and do other actions.
+This tool needs to be converted into a WebAssembly file.We have the option of doing it ourselves, but luckily we won't have to.
+1)Install:
+A)Core: The FFmpeg too converted into WebAssembly: npm install @ffmpeg/ffmpeg @ffmpeg/core
+B)FFmpeg - A javascript API for interacting with the core.
+NOTE
+In the future we will have problems with the ffmpeg packages because is at experimental stage.Moreover, we will  have problems with the syntax
+of node.js because typescript will not be able to read it. For this reason, we will run a command that will a package that allow us to use node.js
+code in typescript. Actually , this package includes type definition for node.js.
+
+To tell javascript to expect code from node js we hit the above:
+SOS : npm install @types/node
+Now we go to add in the types array the node value. in the configuration file.
+"tsconfig.app.json"
+"extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["node"]
+  },
+
+2)A we said before we  need to convert the FFmpeg package to WebAssembly. To that there is no need to import it manually but to make Angular does this
+job. In the angular.jason file we search for the "build/assets/src/assets" and add the "input" object with the "node_modules/@ffmpeg/core/dist"value.
+Also, we will add the "output" property with the "test" value. This way we have access to files from the input option by typing "test"
+"angular.json"
+"assets": [
+      "src/favicon.ico",
+      "src/assets",
+      {
+        "input": "node_modules/@ffmpeg/core/dist",
+        "output": "test
+      }
+]
+However the final part of the code is this:
+{
+  "input": "node_modules/@ffmpeg/core/dist",
+  "output": "node_modules/@ffmpeg/core/dist",
+  "glob": "*"
+}
+
+3)ADDING SUPPORT FOR SharedArrayBuffer:
+Web workers : scripts that run on a different thread than the main application.A web worker does not have access to the document.
+If it needs to send data to the main thread, a message must be posted.What if we need to send a large amount of data?
+Sending large data between a web worker and the main thread can freeze an application.
+A new feature was to add shared array buffers to address this problem.
+Shared array buffers are objects for sharing data between the main thread and web worker.
+If we insert large amounts of data into a shared array buffer, object applications will not freeze.
+It's a highly sensitive feature after it was introduced to the web and exploit was discovered.
+This feature allowed attackers to read private data from your application.Most major browsers immediately disabled it from the web.
+It wasn't until a few months later when they enabled it again with a patch to enable shared array buffers.
+We need to add headers to the responses from our app.
+
+Again we will work in "angular.json" file at the "serve" command and we will add one more attribute, "options/headers..." and we will restart
+the server.
+"angular.json":
+"serve": {
+  "builder": "@angular-devkit/build-angular:dev-server",
+  "configurations": {
+    "production": {
+      "browserTarget": "clips:build:production"
+    },
+    "development": {
+      "browserTarget": "clips:build:development"
+    }
+  },
+  "defaultConfiguration": "development",
+  "options": {
+    "headers": {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp"
+    }
+  }
+},
+
+Heades: The head section describes the document information inside.This tag does not get presented to users.
+Presentation must be added to the body tag.This separation of information can be applied to requests and responses whenever we perform a request.
+Browsers will split a request into two categories, which are headers and body headers contain information about the request.
+For example, we can store the IP browser information or the date of the request.
+
+4)LOADING FFmpeg WITH A SERVICE:
+a)Now we will create a service for ffmpeg: ng g service services/ffmpeg
+"ffmpeg.service.ts"
+import { Injectable } from '@angular/core';
+import { createFFmpeg } from '@ffmpeg/ffmpeg';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FfmpegService {
+  isReady = false
+  private ffmpeg
+
+  constructor() {
+    this.ffmpeg = createFFmpeg({ log:true })
+   }
+
+   async init() {
+    if(this.isReady){
+      return
+    }
+
+    await this.ffmpeg.load() //start loading FFmpeg, we can call the load function to start downloading FFmpeg
+
+    this.isReady = true //prevent the ffmpeg to reload
+   }
+}
+b)We are going to initialize FFmpeg by injecting the service into the upload component,
+"upload.component.ts"
+import { FfmpegService } from 'src/app/services/ffmpeg.service';
+...
+constructor(
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth,
+    private clipsService: ClipService,
+    private router: Router,
+    public ffmpegService: FfmpegService
+  ){
+    auth.user.subscribe(user => this.user =user)
+    this.ffmpegService.init()
+  }
+add an icon from material icons: https://fonts.google.com/icons
+add an animation from tailwind: https://tailwindcss.com/docs/animation
+
+To be precise, we want to add a spinner or an icon spinning when we load the Upload page. To do that we need to add the icon first and based
+on the condition the spinner is displayed. In the ng-container is our icon. Then we create a new ng-template in where we place the "Upload Dropbox"
+and "Video Editor". The template will be activated and our page will load with the else statement of the privious condition
+"upload.component.html"
+<ng-container >
+  <span *ngIf="!ffmpegService.isReady; else uploadEditorCtr"
+    class="material-icons text-center text-6xl p-8 animate-spin">
+    settings
+  </span>
+</ng-container>
+<ng-template #uploadEditorCtr>
+<!-- Upload Dropbox -->
+...
+<!-- Video Editor -->
+</ng-template>
+
+Then if you reload the page you will notice the settings icon spinning.
+
+5)SAVING FILES IN MEMORY
+The first step is to send the file from our component to our service.
+a)"upload.component.ts"
+async storeFile($event: Event){
+    this.isDragOver = false
+
+    this.file = ($event as DragEvent).dataTransfer ?
+      ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
+      ($event.target as HTMLInputElement).files?.item(0) ?? null
+
+    if(!this.file || this.file.type !== 'video/mp4'){
+      return
+    }
+
+    await this.ffmpegService.getScreenshots(this.file)
+......
+}
+Now we need to initialize the getScreenshots() in the ffmpege.service.ts.
+b)"ffmpege.service.ts"
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+...
+async getScreenshots(file: File){
+  //we need to convert a file from an onbject to a binary file to that we import the "fetchFile"
+  const data = await fetchFile(file)
+  //the FS function gives us access to the packages independent memory system, we can read and write files to this system.
+  this.ffmpeg.FS('writeFile', file.name, data) //FS('action on file', 'fileName', 'data for the file')
+  }
+
+6)GENERATING A SCREENSHOT
+"ffmpeg.service.ts"
+async getScreenshots(file: File){
+    //we need to convert a file from an onbject to a binary file to that we import the "fetchFile"
+    const data = await fetchFile(file)
+    //the FS function gives us access to the packages independent memory system, we can read and write files to this system.
+    this.ffmpeg.FS('writeFile', file.name, data) //FS('action on file', 'fileName', 'data for the file')
+
+    await this.ffmpeg.run(
+      //Input
+      '-i', file.name,  //we're telling FFmpeg to process the file stored in the file system.
+      //Output Options
+      '-ss', '00:00:01',  //we're changing the current timestamp.
+      '-frames:v', '1',  //we're telling FFmpeg to focus on a single frame
+      '-filter:v', 'scale=510:-1',
+      //Output
+      'output_01.png'  //we're saving the frame to a file called output zero one dot PNG.
+    )
+   }
+7) GENERATING MULTIPLE SCREENSHOT
+"ffmpeg.service.ts"
+    const seconds = [1,2,3]
+    const commands: string[] = []
+
+    seconds.forEach(second => {
+      commands.push(
+        //Input
+        '-i', file.name,  //we're telling FFmpeg to process the file stored in the file system.
+        //Output Options
+        '-ss', `00:00:${second}`,  //we're changing the current timestamp.
+        '-frames:v', '1',  //we're telling FFmpeg to focus on a single frame
+        '-filter:v', 'scale=510:-1',
+        //Output
+        `output_0${second}.png`  //we're saving the frame to a file called output zero one dot PNG.
+      )
+    })
+
+    await this.ffmpeg.run(
+      ...commands
+    )
+Now when we upload a file with the dec tools open, we will find 3 outputs, one for every second
+
+8)CREATING SCREENSHOT URLs
+Unfortunately, browsers do not allow us to display an image with binary data.We must set an image tags source attribute to a URL.
+Therefore, we need to convert a screenshot from a binary array to a stream.
+
+"ffmpeg.service.ts"
+const screenshots: string[] = []
+
+    seconds.forEach(second => {
+      const screeshotFile = this.ffmpeg.FS(
+        'readFile', `output_0${second}.png` //If we look at the first loop, the name of the file is the word output.
+      )
+      const screenshotBlob = new Blob(
+        [screeshotFile.buffer], {
+          type: 'image/png'
+        }
+      )
+
+      const screenshotURL = URL.createObjectURL(screenshotBlob)
+
+      screenshots.push(screenshotURL)
+    })
+
+    return screenshots
+
+9)BYPASSING SANITIZATION WITH PIPES
+a)"upload.compoent.ts"
+screenshots:string[] = []
+....
+in the storFile()
+  this. screenshots = await this.ffmpegService.getScreenshots(this.file)
+
+"upload.compoent.html": search for Video Editor / screenshots
+<div *ngForm="let screenshot  of screenshots"
+  class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+  <div class="border-8 cursor-pointer border-green-400">
+    <img src="screenshot">
+  </div>
+</div>
+b)create a custom pipe with cmd : ng g pipe video/pipes/safeURL
+"safe-url.pipes.ts"
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser'; //need to generate a valid URL
+
+@Pipe({
+  name: 'safeURL'
+})
+export class SafeURLPipe implements PipeTransform {
+
+  constructor(private sanitizer: DomSanitizer){}
+
+  transform(value: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(value);
+  }
+}
+"upload.compoent.html"
+<div *ngFor="let screenshot  of screenshots"
+    class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="border-8 cursor-pointer border-green-400">
+      <img [src]="screenshot | safeURL"> // <-----
+    </div>
+  </div>
+
+
+10)GIVING FEEDBACK TO THE USER DURING THE UPLOAD PROCESS
+a)"ffmpeg.service.ts"
+isRunning = false
+...
+in the getScreenshots()
+start
+this.isRunning = true
+...
+end
+this.isRunning = false
+b)"upload.compoent.ts"
+in the storeFile()
+if(this.ffmpegService.isRunning){  //This statement should effectively stop the user from uploading another file while another file is being
+  return
+}
+c)in the dropbox section we will add an icon
+"upload.compoent.html"
+<span *ngIf="ffmpegService.isRunning"
+  class="material-icons text-center text-6xl p-8 animate-spin">
+  autorenew
+</span>
+
+
+11)SELECTING A SCREENSHOT
+a)"upload.componet.ts"
+ selectedScreenshot = ''
+ ...
+ in the storeFile()
+ this.selectedScreenshot = this.screenshots[0]
+b)"upload.componet.html" : Video Editor / Screenshots
+ <div class="border-8 cursor-pointer"
+  [ngClass]="{
+    'border-green-400': screenshot === selectedScreenshot,
+    'border-transparent': screenshot !== selectedScreenshot
+  }"
+  (click)="selectedScreenshot = screenshot">
+  <img [src]="screenshot | safeURL">
+</div>
+NOw when we upload a video the user can choose a screenshot and the green border is changing based on the selection.
+
+12)UPDATING THE FIREBASE STORAGE RULES
+firabase/storage/rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{document=**} {
+      allow read:  if true;
+      allow write: if request.auth != null &&
+        (                                                   <---
+          request.resource.contentType == 'video/mp4' ||    <---
+          request.resource.contentType == 'image/png'       <---
+        )&&                                                 <---
+        request.resource.size >= 1 * 1000 * 1000 && // 1MB
+        request.resource.size <= 1 * 1000 * 1000 * 1000; // 1GB
+      allow delete: if request.auth != null;
+    }
+  }
+}
+13)UPLOADING A BLOB:
+NOTE: blob is an object that acts as a wrapper around a file's binary data as long as Firebase receives a file's binary data.
+First, we need to create a function for converting our URLs back to blobs.The URLs created by our app are blob URLs.
+Long URLs point to our system's memory. We're allowed to access our files through these URLs.
+We're going to extract the logic for grabbing a blob through a URL in this service
+a)"ffmpeg.service.ts"
+async blobFromURL(url: string){
+  const response = await fetch(url)  //fetch a file from a blob
+  const blob = await response.blob() //grab the file
+
+  return blob
+}
+b)"upload.component.ts"
+screenshotTask?: AngularFireUploadTask
+....
+async uploadFile(){
+  ....
+  const screenshotBlob = await this.ffmpegService.blobFromURL( //call of blobFromURL func from the selected screenshot
+      this.selectedScreenshot
+    )
+  const screenshotPath = `screenshots/${clipFileName}.png` //create the path in firabase/storage for a specific file name
+  ...
+  this.screenshotTask = this.storage.upload(  //upload in firabase/storage the info of screenshot's blob
+    screenshotPath, screenshotBlob
+  )
+}
+Until now we successfully upload a video in our firabase with a selected screenshot that is stored in firebase.
+c)I modified the storage rules in firebase: 1KB - 1GB
+
+
+14)RECALCULATING THE UPLOAD PROGRESS
+import { combineLatest } from 'rxjs';
+....
+....
+"upload.component.ts"
+//Upload percentage progress (file + screenshot)
+    combineLatest([
+      this.task.percentageChanges(), //upload task for file
+      this.screenshotTask.percentageChanges()  //upload task for screenshots
+    ]).subscribe((progress) => {
+      const [clipProgress, screenshotProgress] = progress
+
+      if(!clipProgress || !screenshotProgress){  //Check if the variables are empty
+        return
+      }
+
+      const total = clipProgress + screenshotProgress //adding the 2 upload percentages
+
+      this.percentage = total as number / 200 //if the sum of these 2 numbers (total) == 200 then the upload is successful.
+    })
+
+
+15)FORKJOIN OPERATOR
+Firstly, we need to merge two observables into one.
+We are going to subscribe to these snapshot changes observable from the video and screenshot uploads.
+Secondly, we don't want to insert data into the database until both actions are complete.Lastly, we need access to the latest values pushed by AL observables.
+We need to build an observable and pipeline to satisfy these requirements.There are different operators at our disposal to address our requirements.
+There's one operator in particular that does everything in one.It's called the fork joint operator.
+It'll accept an array of observables.Values are not pushed to the subscriber until all observables have been completed upon completion.
+The latest values pushed by each observable are streams to the subscriber.
+"upload.component.ts"
+async uploadFile(){
+  ....
+  ....
+  const screeshotRef = this.storage.ref(screenshotPath) //Grabbing the screenshot's URL
+  ....
+  forkJoin([
+      this.task.snapshotChanges(),
+      this.screenshotTask.snapshotChanges()
+    ]).pipe(
+      switchMap(() => forkJoin([   //Waiting Firabase to give us the 2 URL for these 2 files (file + screenshot)
+        clipRef.getDownloadURL(),
+        screeshotRef.getDownloadURL()
+      ]))
+    ).subscribe({
+      next: async (urls) => {
+        const [clipURL, screenshotURL] = urls
+
+        const clip = {
+          uid: this.user?.uid as string,
+          displayName: this.user?.displayName as string,
+          title: this.title.value as string,
+          fileName: `${clipFileName}.mp4`,
+          url: clipURL,
+          screenshotURL,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }
+        ....
+}
+NOTE: The forkJoin Operator combines 2 different observables into one. Basically, it takes the 2 operators as an array. So, when you subscribe the
+values of the operator you need an array as well. we chaged the url --> urls and create an array of [clipURL,screenshotURL]
+
+
+16)DELETING SCREENSHOTS
+To delete a screenshot we need the filename of the clip. Then we add it in the IClip modal and at the upload component.
+a)"clip.modal.ts"
+import firebase from "firebase/compat/app";
+
+export default interface IClip {
+  docID?: string;
+  uid: string;
+  displayName: string;
+  title: string;
+  fileName: string;
+  url: string;
+  screenshotURL: string;
+  timestamp: firebase.firestore.FieldValue;
+  screenshotFileName: string;
+}
+
+"upload.component.ts"
+....
+async uploadFile(){
+  ...
+  const clip = {
+          uid: this.user?.uid as string,
+          displayName: this.user?.displayName as string,
+          title: this.title.value as string,
+          fileName: `${clipFileName}.mp4`,
+          url: clipURL,
+          screenshotURL,
+          screenshotFileName: `${clipFileName}.png`,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }
+  ...
+}
+b)We need to update the delete function not only to dellete the file but the screenshot with the same name as well.
+"clip.service.ts"
+async deleteClip(clip: IClip){
+    const clipRef = this.storage.ref(`clips/${clip.fileName}`) //we follow the path/reference of the file in the storage/clips/clip.filename
+    const screenshotRef = this.storage.ref(`screenshots/${clip.screenshotFileName}`) <---
+
+    await clipRef.delete() //We delete the selected file from the storage
+    await screenshotRef.delete()  <---
+
+    await this.clipsCollection.doc(clip.docID).delete() //we delete the document
+  }
+
+
+PLAYING VIDEOS
+1)CREATING LIST COMPONENT : ng g component ClipsList
+from the home.component.html cut the Clips List section and paste it at clips-list.component.html
+
+2)HANDLING SCROLL EVENTS
+We will use a technich with the name infinite scrolling.
+Firstly, we need to decide when to perform a request for more clips.
+If a user scrolls past a location on the page, we'll want to begin requesting data.This is where things can get tricky.
+We need to keep track of the last set of records we requested.We don't want to return a list of clips that have already been requested.
+Secondly, we should avoid parallel requests.It can lead to inconsistent results and increase the load on the server.
+We'll address these issues when we come across them.The first step is to listen for a scroll event on the window.
+The event should initiate a request for additional data when the window is. Scroll to the bottom of the document and your editor.
+
+NOTE:
+offsetHeight:This property contains the height of the entire page, for this example.Let's assume the height of the document is 2000 pixels.
+
+innerHeight:This property contains the height of the viewable area in the browser.It's how much of the page the user is able to see.
+
+scrollTop:This property contains the distance from the top of the page to the top of the viewable area.
+"clips-list.component.ts"
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-clips-list',
+  templateUrl: './clips-list.component.html',
+  styleUrls: ['./clips-list.component.css']
+})
+export class ClipsListComponent implements OnInit, OnDestroy{
+
+
+  ngOnInit(): void {
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+
+  handleScroll = () => {
+    const {scrollTop, offsetHeight} = document.documentElement
+    const { innerHeight } = window
+
+    const bottomOfWindow = Math.round(scrollTop) + innerHeight === offsetHeight // Check if the scroll top and inner height properties are equal to the offset height
+
+    if(bottomOfWindow){
+      console.log('bottom of window') //when the user reaches the bottom the page the message will logged
+    }
+  }
+
+}
+
+3)QUERYING FOR CLIPS
+"clip.service.ts"
+pageClips: IClip[] = []
+pendingReq = false
+...
+...
+async getClips(){
+    //Check if the user trigger the request multiple times
+    if(this.pendingReq){
+      return
+    }
+
+    this.pendingReq = true
+
+    let query = this.clipsCollection.ref.orderBy(
+      'timestamp', 'desc'
+    ).limit(6) //retrive the first 6 from database
+
+    const { length } = this.pageClips
+
+    if(length){
+      //We're grabbing the ID so that we can perform a query for an individual document after the variable
+      const lastDocID = this.pageClips[length - 1].docID //store the ID of the last stored document(file)
+      const lastDoc = await this.clipsCollection.doc(lastDocID) //we get a document by its ID. It returns a snapshot of the document
+        .get()
+        .toPromise()
+
+      query = query.startAfter(lastDoc) //startAfter: Telling Firebase, you start looking for documents after a specific document.
+    }
+    //Initiate the request. DB will not send data until we send the req
+    const snapshot = await query.get()
+    //post the document data from our query into the page documents erase snapshots or arrays so we can loop through them
+    snapshot.forEach(doc => {
+      this.pageClips.push({   //push this data into the documents array with a spread operator.
+        docID: doc.id,
+        ...doc.data()
+      })
+    })
+
+    this.pendingReq = false
+  }
+
+4)RENDERING CLIPS ON THE HOME PAGE
+a)
+"clips-list.component.ts"
+import { ClipService } from '../services/clip.service';
+....
+constructor(
+    public clipService: ClipService
+  ){
+    this.clipService.getClips()
+  }
+...
+handleScroll = () => {
+  const {scrollTop, offsetHeight} = document.documentElement
+  const { innerHeight } = window
+
+  const bottomOfWindow = Math.round(scrollTop) + innerHeight === offsetHeight // Check if the scroll top and inner height properties are equal to the offset height
+
+  if(bottomOfWindow){
+    this.clipService.getClips()
+  }
+}
+b) First we remove all the dummy links from the page and we keep only one. We need to create a dynamic clip list. Then we will loop through the clips
+from the service list and we will create a routerLink for each one of them. Lastly, we will give to any clip of the list the his title, ID(docID), timestamp and the displayName of the
+user who created it.
+"clips-link.component.ts"
+<!-- Clips List -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+  <a *ngFor="let clip of clipService.pageClips"
+    [routerLink]="['/', 'clip', clip.docID]"
+    ....
+    <!-- Heading -->
+      <h2 class="text-3xl mb-2">
+        {{ clip.title }}
+      </h2>
+    <!-- Name & Date -->
+      <p class="mb-0">
+        {{ clip.displayName }} &#183;
+        <span class="text-gray-400">
+          {{clip.timestamp }}
+        </span>
+      </p>
+
+However, somthing goes wrong with the display of the clips. The image doent displayed. We will solve this on the next lecture.
+
+5)UNDERSTANDING CROSS ORIGIN ISSUES
+Let's talk about a concept called cross origin resource sharing ( CORS ).
+They are files downloaded by the browser.Requesting a resource can be a dangerous business.
+If your app downloads a malicious resource, it can spell trouble for your users.
+Browsers introduce a set of security policies called Cross Origin Resource Sharing.It's also known as cause.
+The idea of these policies is simple.Let's say we have a site called site.
+A Site A may want to download a JavaScript file from Site A.It's the same site.Browsers allow sites to download resources from the same site.
+This feature is known as a same origin policy.It makes complete sense, right?Apps should be able to download files hosted on the same server.
+Let's kick it up a notch.What if we going to go file from another site?
+For example, you may want to store your asset files on a CD, or you may want to grab files from an external resource like Firebase.
+This relationship is known as Cross Origin Policy.It's when files are hosted on different servers or origins.
+
+NOTE:
+In our app we have initiate the "Cross-Origin-Embedder-Policy: require-corp".This policy enforces stricter standards on our app.
+It does not allow our app to load cross origin resources without permission.Our images are hosted on Firebase is server.
+By default, their servers do not permit other origins to download their resources.To be clear, they don't have to.
+In most scenarios, you can embed images on your app without permission.However, since we're adding this header, the browser wants explicit permission.
+It doesn't care if the images can be loaded without permission.The browser demands permission.
+Here's where things get challenging.It's easy to add headers to our development server.
+This time, we need to add headers to Firebase's servers, which is another story.Working with servers is a back-end developer job.
+We can give permission by adding a header called 'Access Control Allow Origin'.There's header can be set to a domain.
+Alternatively, we can set this header to a wildcard character.
+
+6)FIXING CROSS ORIGIN ISSUES
+a)The Cross Origin attribute will inform the browser of a resource located at an external resource, we need to add this attribute whenever we're trying to retrieve resources on cross origins.
+For example, the home page has a video playing in the background of the introduction section.This video originates on the same server.
+We don't need to apply the cross origin attribute on this video.On the other hand, our images will need this attribute.
+They're stored on Firebase is server.
+
+"clip-list.component.ts"
+<!-- Image -->
+    <img class="card-img-top rounded-tl-2xl w-full"
+      [src]="clip.screenshotURL" crossorigin> <---
+
+b)create a new file "cors.json":
+[
+  {
+    "origin": ["*"],
+    "responseHeader": ["Content-Type"],
+    "methods": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]
+// The origin property is an array of domains allowed to download resources from our server.
+// The content type header stores, the mime type of a file, the browser is going to need this information for correctly rendering a file on the page.
+
+c)The final we've created will configure the settings for Google Cloud Storage Service.
+Install gsUtil: https://cloud.google.com/storage/docs/gsutil_install
+
+This tool is a Python program for communicating with Google Cloud Services through the command line.
+We can upload our configuration settings with this tool.It's capable of connecting to your cloud projects.
+After the installation restart CMD and your code console
+version check: gsutil version
+add cors to our project: gsutil cors set cors.json gs://clips-3baee.appspot.com
+we need to add the url of the storage in our database(Firebase).
+
+
+7)FIXING THE TIMESTAMP
+we can create a new pipe to solve the timestamp issues.: ng g pipe pipes/fbTimestamp
+
+a)modify the "fb-timestamp.pipe.ts" file and the firbase and the datePipe
+import { Pipe, PipeTransform } from '@angular/core';
+import firebase from 'firebase/compat/app';
+import { DatePipe } from '@angular/common';
+
+@Pipe({
+  name: 'fbTimestamp'
+})
+export class FbTimestampPipe implements PipeTransform {
+
+  constructor(private datePipe: DatePipe){
+
+  }
+
+  transform(value: firebase.firestore.FieldValue){
+    return null
+  }
+
+}
+
+b)add the datePipe as well.
+"clip-list.component.ts"
+import { DatePipe } from '@angular/common';
+...
+@Component({
+  selector: 'app-clips-list',
+  templateUrl: './clips-list.component.html',
+  styleUrls: ['./clips-list.component.css'],
+  providers: [DatePipe]
+})
+
+c)We had a type error on the toDate(). For this reason, we insertied the type on value property to avoid this confusion.
+"fb-timestamp.pipe.ts"
+The date pipe prefers to work with JavaScript date objects at the moment. The value argument is not compatible with the pipe.
+import { Pipe, PipeTransform } from '@angular/core';
+import firebase from 'firebase/compat/app';
+import { DatePipe } from '@angular/common';
+
+@Pipe({
+  name: 'fbTimestamp'
+})
+export class FbTimestampPipe implements PipeTransform {
+
+  constructor(private datePipe: DatePipe){
+
+  }
+
+  transform(value: firebase.firestore.FieldValue){
+    const date = (value as firebase.firestore.Timestamp).toDate() //the toDate() function needed to assert the type of the value property
+    return this.datePipe.transform(date, 'mediumDate')
+  }
+
+}
+
+d) Last we add the fbTimestamp pipe in our template
+"clip0list.component.ts"
+<!-- Name & Date -->
+  <p class="mb-0">
+    {{ clip.displayName }} &#183;
+    <span class="text-gray-400">
+      {{clip.timestamp | fbTimestamp }}
+    </span>
+  </p>
+
+
+8)RENDERING CLIPS ON THE CLIP PAGE
+a)First we need to stop infinite scrolling. By default the browsers has enable the infinite scrolling. To do that, we will create an input that will
+check about this behaviour via the ngOnInit & ngOnDestroy functions.
+"clip-list.component.ts"
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+...
+ @Input() scrollable = true //Disable infinite scrolling
+ ...
+ ngOnInit(): void {
+    //Disable infinite scrolling
+    if(this.scrollable){
+      window.addEventListener('scroll', this.handleScroll)
+    }
+  }
+
+  ngOnDestroy(): void {
+    //Disable infinite scrolling
+    if(this.scrollable){
+      window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    this.clipService.pageClips = [] //Clear the array
+  }
+
+b)Search for the Video List comment. There replace all the above with the "<app-clips-list>"
+"clip.component.html"
+<!-- Video List -->
+    <app-clips-list [scrollable]="false"></app-clips-list>
+
+Now when you click on a video at the homepage it renders the same clip-list.
+
+
+9)INSTALL VIDEOJS
+It is a javascript framework usefull for playing videos. It is not mandatory but recommended.
+Install: npm i video.js @types/video.js @videojs/themes
+To be more accurate, the most stable version of video.js is 7.15.4 so run this: npm install video.js@7.15.4
+This way,  your app will not have any issues about the library of video.js in your app.
+This package doesnt offer TypeScript support , so we will install the second package.
+
+10)SELECTING ELEMENTS WITH ViewChild DECORATOR(Angular)
+For now, our goal is to make the player functional.Once we've got a functioning player will load the video and the previous lecture.
+We install the library called video J.S..We can initialize the video player with this packagers functions.
+Before we do, we need to select the video element in the template.
+Throughout most of this course, we've experienced how angular exposes properties and methods to a template.
+We're in a situation where the reverse needs to be true.The video element needs to be exposed to the component class.
+By default, Angular does not expose elements to the class.We need to manually query the template for an element.
+
+
+a)"clip.component.html"
+<!-- Video Editor -->
+  <div class="relative">
+    <!-- Video Player -->
+    <video controls #videoPlayer   <---
+      class="video-js vjs-theme-forest mx-auto"> <--- removed the data-setup
+      <source src="assets/video/hero.webm" type="video/webm">
+    </video>
+  </div>
+
+b)we will make the video playable via the javascript and not from HTML as before.Whenever we're selecting elements with the View child decorator,
+the property will store an instance of the element reference class.
+
+"clip.component.ts"
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+...
+@ViewChild('videoPlayer',  { static: true}) target?: ElementRef
+...
+
+
+NOTE: Change detection
+Let's quickly review it Angular is capable of updating our template whenever a property updates in our class.This process is known as change detection.
+It plays a vital role in keeping our apps templates synchronized with our data components go through change detection when they're initialized.
+Therefore, we can define lifecycle functions in our component to wait for change detection to finish. We have to focus on ngOnit & ngAfterInit
+functions.
+
+NOTE: By setting the static property to true, the View child decorator will update this property with the
+element before the N.G. on init function is called in our energy on init function.
+
+11)INITIALIZE THE VIDEO PLAYER
+The video function will help us with creating a player before we create the player, we should create
+a property for storing the player instance in the class.
+
+"clip.component.ts"
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import videojs from 'video.js';
+
+@Component({
+  selector: 'app-clip',
+  templateUrl: './clip.component.html',
+  styleUrls: ['./clip.component.css']
+})
+export class ClipComponent implements OnInit {
+  id = ''
+  @ViewChild('videoPlayer', { static: true }) target?: ElementRef
+  player?: videojs.Player
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.player = videojs(this.target?.nativeElement);
+
+    this.route.params.subscribe((params: Params) => {
+      this.id = params.id;
+    });
+  }
+}
+THere is still an error on this point. It's aboout the the "videojs.Player"
+
+12)STYLES WITHOUT VIEW ENCAPSULATION
+a)"clip.component.css"
+@import '~video.js/dist/video-js.css';
+@import '~@video.js/themes/dist/forest/index.css';
+....
+and then go to the "styles.css" file and search for the comment " /* Video.js CSS START */ " - " /* Video.js CSS END */" and cut it.
+Then paste this part to the clip.component.css file.
+
+b)we will disable view encapsulation on the clip component.Let's look at how an enumerator can help us inside the components configuration
+object at a property called encapsulation.Its value will be the view encapsulation nonmember.
+The encapsulation property has three possible values, the value we're using is called none, which
+will disable encapsulation angular uses enumerators to prevent us from accidentally using an invalid value.
+
+13)TAILWIND'S ASPECT RATIO CLASSES
+"clip.component.html"
+<!-- Video Editor -->
+  <div class="relative aspect-video">
+
+Now the video can be loaded and played after clicking the play button in the middle.
+
+14)RESOLVING DATA WITH A GUARD
+we want to load dynamically the playable video via the url.
+a)"clip.service.ts"
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router";
+....
+constructor(
+    private db: AngularFirestore,
+    private auth: AngularFireAuth,
+    private storage: AngularFireStorage,
+    private router: Router
+  ) {
+    this.clipsCollection = db.collection('clips')
+  }
+...
+ resolve(route: ActivatedRouteSnapshot, state:RouterStateSnapshot) {
+    return this.clipsCollection.doc(route.params.id)
+      .get()
+      .pipe(
+        map(snapshot => {
+          const data = snapshot.data()
+
+          if(!data){
+            this.router.navigate(['/'])
+            return null
+          }
+
+          return data
+        })
+      )
+  }
+
+b)"app-routing.module"
+import { ClipService } from './services/clip.service';
+....
+const routes: Routes = [
+  {path: '', component: HomeComponent},
+  {path: 'about', component: AboutComponent},
+  {path: 'clip/:id', component: ClipComponent, resolve:{clip: ClipService}}, <----
+  {path: '**', component: NotFoundComponent}
+];
+Angular will search for a function called resolve in our service if it's available.
+This function will be called whenever the user visits this route.
+The data returned by the resolve function can be accessed through the property's name in this object.
+In this example, we are going to reference the data as clip.The next step is to grab this data from our component.
+
+
+15)DYNAMICALLY RENDER THE VIDEO
+a)"clip.component.ts"
+import IClip from '../models/clip.model';
+import { DatePipe } from '@angular/common';<--- need it for the next step for the date
+...
+@Component({
+  selector: 'app-clip',
+  templateUrl: './clip.component.html',
+  styleUrls: ['./clip.component.css'],
+  encapsulation: ViewEncapsulation.None,
+  providers: [DatePipe] <<---- for the next step, provide the correct data for the date
+})
+...
+clip?: IClip;
+...
+ ngOnInit(): void {
+    this.player = videojs(this.target?.nativeElement);
+
+    this.route.data.subscribe(data => {
+      this.clip = data.clip as IClip //reference to the data resolved by our service through the name we gave it in the roots.
+      //Dynamic update the source
+      this.player?.src({ //This function accepts an object of options for the new source.
+        src: this.clip.url, //url of the video
+        type: 'video/mp4'
+      })
+    })
+  }
+b)We will replace the data from the clip displayed when is clicked.
+"clip.component.html"
+<!-- Title and Uploader -->
+      <h1 class="font-bold mb-2 text-3xl">
+        {{ clip?.title }}
+      </h1>
+      <div class="text-gray-400 mb-6">
+        Uploaded By {{ clip?.displayName}} on
+        <span>{{ clip?.timestamp | fbTimestamp}}</span>
+      </div>
+It throw asn error about the date. Then, we need to make a configuration check on fb-timestamp.pipe.ts:
+"fb-timestamp.pipe.ts"
+transform(value: firebase.firestore.FieldValue | undefined){  <--- undefined in case we dont have a value
+    if(!value){//check if is emty and return an emty string <--- to fix the error message
+      return ''
+    }
+    const date = (value as firebase.firestore.Timestamp).toDate() //the toDate() function needed to assert the type of the value property
+
+    return this.datePipe.transform(date, 'mediumDate')
+  }
+
+"clip.component.html"
+<!-- Video Player -->
+  <video controls #videoPlayer crossorigin
+    class="video-js vjs-theme-forest mx-auto">
+  </video>
+
+
+16)FIX THE MANAGE PAGE
+We need to render the clips we upload. Lets do it dynamically.
+a)"manage.component.html"
+ <!-- Image -->
+  <a href="#">
+    <img class="card-img-top rounded-tl-2xl w-full"
+      [src]="clip.screenshotURL" crossorigin>  <----
+  </a>
+
+17)COPYING LINKS TO THE CLIPBOARD
+There are two APIs for copying the url on the clickboard
+Clipboard API: https://caniuse.com/clipboard <---- recommended
+execCommand API: https://caniuse.com/mdn-api_document_execcommand
+a)"manage.component.html"
+<!-- Link -->
+  <a [routerLink]="['/', clip, clip.docID]" class="font-bold mb-2">
+    {{ clip.title }}
+  </a>
+  <a (click)="copyToClipboard($event, clip.docID)"
+    class="bg-gray-400 text-white px-2 py-1 ml-2 text-sm rounded">
+    Copy Link
+  </a>
+
+b)"manage.component.ts"
+async copyToClipboard($event: MouseEvent, docID: string | undefined){
+    $event.preventDefault() //prevent the default behaviour of the browser
+    //check if the focID is empty
+    if(!docID){
+      return
+    }
+
+    const url = `${location.origin}/clip/${docID}` //location defined by the browser and We're accessing a read only property called Origin to grab the current base URL.
+
+    await navigator.clipboard.writeText(url) //the writeText() will add text to users
+
+    alert('Link Copied!')
+  }
+
+18)LAZY LOADING modules
+"app-routing.module.ts"
+ {
+    path: '',
+    loadChildren: async () => (await import('./video/video.module')).VideoModule
+  },
+The video module class is a named export web pack isn't aware of the types of values exported by a module.
+We need to explicitly tell Webpack where to find the module class back in the app routing module.
+We're finished a recap, we're chilling, angular to load this module when the user visits the paths from this module.
+
+However, we dont need to import this module from the app.module.ts. Go to the app.module.ts and remove the VideoModule and test your app
+
+
+
+PROJECT DEPLOYMENT
+
+1)PRODUCTION BUDGETS
+(https://angular.io/guide/build#configuring-size-budgets)
+Budgets are file size thresholds that are checked against your bundles.If a file size exceeds a budget, Angular will stop building your project.
+The purpose of budgets is to prevent you from deploying heavy files.
+"angular.json"
+ "budgets": [
+    {
+      "type": "initial",
+      "maximumWarning": "5mb",
+      "maximumError": "5mb"
+    },
+    {
+      "type": "anyComponentStyle",
+      "maximumWarning": "50kb",
+      "maximumError": "50kb"
+    }
+a)The type property will tell angular of the type of files to apply.
+b)This budget to the maximum warning property is the maximum file size before angular throws a warning (threshold)
+c)The maximum error property works the same way, but throws in air instead of a warning and the first object. (threshold)
+The type property is being set to "initial", which is the setting for script files.
+
+
+2)MODIFY FIRABASE RULES --->PRODUCTION
